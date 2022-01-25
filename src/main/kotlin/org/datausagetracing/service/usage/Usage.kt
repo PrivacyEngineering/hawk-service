@@ -29,14 +29,14 @@ class Usage {
 
     lateinit var initiatorHost: String
 
-    @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
     var endpointProperties: MutableList<EndpointProperty> = mutableListOf()
 
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
     var initiatorProperties: MutableList<InitiatorProperty> = mutableListOf()
 
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
-    var fields: MutableList<Field> = mutableListOf()
+    var fields: MutableList<UsageField> = mutableListOf()
 
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
     var tags: MutableList<Tag> = mutableListOf()

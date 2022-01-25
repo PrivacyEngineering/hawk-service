@@ -9,7 +9,7 @@ import java.util.*
 @Service
 class UsageInsertService(
     private val usageRepository: UsageRepository,
-    private val fieldRepository: FieldRepository,
+    private val fieldRepository: UsageFieldRepository,
     private val tagRepository: TagRepository,
     private val endpointPropertyRepository: EndpointPropertyRepository,
     private val initiatorPropertyRepository: InitiatorPropertyRepository
@@ -60,7 +60,7 @@ class UsageInsertService(
 
     private fun UsageRequest.insertFields(usage: Usage) {
         fieldRepository.saveAll(fields.map {
-            Field().apply {
+            UsageField().apply {
                 id = UUID.randomUUID()
                 phase = metadata.phase.name
                 side = metadata.side.name

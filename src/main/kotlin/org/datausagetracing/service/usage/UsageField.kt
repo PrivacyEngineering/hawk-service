@@ -4,7 +4,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-class Field {
+class UsageField {
     @Id
     lateinit var id: UUID
 
@@ -27,6 +27,6 @@ class Field {
     var count: Int = 0
 
     @ManyToOne
-    @JoinColumn(name = "usageId")
+    @JoinColumn(name = "usage_id")
     lateinit var usage: Usage
 }

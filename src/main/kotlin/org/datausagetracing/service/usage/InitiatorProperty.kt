@@ -21,6 +21,6 @@ class InitiatorProperty {
     lateinit var value: String
 
     @ManyToOne
-    @JoinColumn(name = "usageId")
+    @JoinColumn(name = "usage_id")
     lateinit var usage: Usage
 }
