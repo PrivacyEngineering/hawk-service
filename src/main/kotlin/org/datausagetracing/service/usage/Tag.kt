@@ -4,7 +4,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-class Field {
+class Tag {
     @Id
     lateinit var id: UUID
 
@@ -15,16 +15,10 @@ class Field {
     lateinit var phase: String
 
     @Column(nullable = false)
-    lateinit var namespace: String
+    lateinit var key: String
 
     @Column(nullable = false)
-    lateinit var format: String
-
-    @Column(nullable = false)
-    lateinit var path: String
-
-    @Column(nullable = false)
-    var count: Int = 0
+    lateinit var value: String
 
     @ManyToOne
     @JoinColumn(name = "usageId")

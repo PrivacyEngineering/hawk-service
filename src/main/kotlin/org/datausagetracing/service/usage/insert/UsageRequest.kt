@@ -1,4 +1,4 @@
-package org.datausagetracing.service.usage
+package org.datausagetracing.service.usage.insert
 
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import java.time.ZonedDateTime
@@ -23,7 +23,7 @@ class UsageRequest {
 
     lateinit var tags: TagsRequest
 
-    fun id(): UUID = UUID.fromString(id)
+    fun uuid(): UUID = UUID.fromString(id)
 
     override fun toString(): String {
         return "Usage(id=$id, metadata=$metadata, endpoint=$endpoint, initiator=$initiator, fields=$fields, tags=$tags)"
@@ -42,8 +42,6 @@ class MetadataRequest {
     override fun toString(): String {
         return "Metadata(side=$side, phase=$phase, timestamp=$timestamp)"
     }
-
-
 }
 
 class EndpointRequest {
@@ -88,7 +86,7 @@ class FieldRequest {
     @Size(max = 255)
     lateinit var path: String
 
-    @Min(0)
+    @Min(1)
     @NotNull
     var count: Int = 0
 

@@ -1,17 +1,15 @@
-package org.datausagetracing.service.usage
+package org.datausagetracing.service.usage.insert
 
 import org.apache.logging.log4j.LogManager
-import org.springframework.validation.BindingResult
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import reactor.core.publisher.Mono
 import javax.validation.Valid
 
 @Validated
 @RestController
 @RequestMapping("/api/usages")
-class UsageController(
-    val usageService: UsageService
+class UsageInsertController(
+    val usageService: UsageInsertService
 ) {
     private val logger = LogManager.getLogger(javaClass)
 
@@ -24,13 +22,7 @@ class UsageController(
     @PostMapping("/batch")
     fun postUsageBatch(@Valid @ModelAttribute @RequestBody batch: List<UsageRequest>) {
         logger.trace("Batch {}", batch)
-        batch.forEach {
-            try {
-                usageService.insertUsage(it)
-            } catch (throwable: Throwable) {
-                logger.catching(throwable)
-            }
-        }
+        usageService.insertUsages(batch)
     }
     /*
 

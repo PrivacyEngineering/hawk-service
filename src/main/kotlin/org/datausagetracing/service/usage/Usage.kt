@@ -1,50 +1,43 @@
 package org.datausagetracing.service.usage
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import org.hibernate.annotations.DynamicInsert
-import org.hibernate.annotations.DynamicUpdate
-import org.hibernate.annotations.Type
-import org.hibernate.annotations.TypeDef
 import java.time.ZonedDateTime
 import java.util.*
 import javax.persistence.*
 
 @Entity
-@DynamicInsert
-@DynamicUpdate
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType::class)
 class Usage {
     @Id
     lateinit var id: UUID
 
-    lateinit var clientRequestTimestamp: ZonedDateTime
+    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    var clientRequestTimestamp: ZonedDateTime? = null
 
-    lateinit var clientResponseTimestamp: ZonedDateTime
+    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    var clientResponseTimestamp: ZonedDateTime? = null
 
-    lateinit var serverRequestTimestamp: ZonedDateTime
+    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    var serverRequestTimestamp: ZonedDateTime? = null
 
-    lateinit var serverResponseTimestamp: ZonedDateTime
+    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    var serverResponseTimestamp: ZonedDateTime? = null
 
-    lateinit var endpointId: String
+    var endpointId: String? = null
 
-    lateinit var endpointHost: String
+    var endpointHost: String? = null
 
-    lateinit var endpointProtocol: String
-
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    lateinit var endpointAdditionalProperties: MutableMap<String, String>
+    var endpointProtocol: String? = null
 
     lateinit var initiatorHost: String
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    lateinit var initiatorAdditionalProperties: MutableMap<String, String>
+    @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    var endpointProperties: MutableList<EndpointProperty> = mutableListOf()
 
-    @OneToMany(mappedBy = "usage")
+    @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
+    var initiatorProperties: MutableList<InitiatorProperty> = mutableListOf()
+
+    @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
     var fields: MutableList<Field> = mutableListOf()
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    lateinit var tags: MutableMap<String, String>
+    @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
+    var tags: MutableList<Tag> = mutableListOf()
 }
