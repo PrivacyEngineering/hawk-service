@@ -1,11 +1,13 @@
 package org.datausagetracing.service.field
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.datausagetracing.service.mapping.MappingField
 import javax.persistence.*
 
 @Entity
 class Field {
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Int? = null
 
@@ -20,6 +22,7 @@ class Field {
     @Column(nullable = false)
     var specialCategoryPersonalData: Boolean = false
 
+    @JsonIgnore
     @OneToMany(mappedBy = "field", cascade = [CascadeType.REMOVE])
     var mappingFields: MutableList<MappingField> = mutableListOf()
 }

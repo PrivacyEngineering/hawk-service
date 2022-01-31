@@ -8,6 +8,8 @@ class FieldService(
 ) {
     fun listFields(): List<Field> = fieldRepository.findAll()
 
+    fun showField(name: String): Field = fieldRepository.findByName(name) ?: error("Field does not exist")
+
     fun insertField(request: FieldRequest) {
         val field = Field()
         field.apply(request)

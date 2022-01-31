@@ -1,10 +1,12 @@
 package org.datausagetracing.service.usage
 
+import org.datausagetracing.service.mapping.Mapping
 import java.time.ZonedDateTime
 import java.util.*
 import javax.persistence.*
 
 @Entity
+@Table(indexes = [Index(columnList = "endpointId")])
 class Usage {
     @Id
     lateinit var id: UUID
@@ -40,4 +42,8 @@ class Usage {
 
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
     var tags: MutableList<Tag> = mutableListOf()
+
+    @ManyToMany
+    @JoinColumn(name = "endpointId")
+    var mappings: MutableList<Mapping> = mutableListOf()
 }

@@ -24,3 +24,8 @@ class EndpointProperty {
     @JoinColumn(name = "usage_id")
     lateinit var usage: Usage
 }
+
+fun List<EndpointProperty>.toMap(): Map<String, String> = this
+    .map { it.key to it.value }
+    .distinctBy { it.first }
+    .toMap()
