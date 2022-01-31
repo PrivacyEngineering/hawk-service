@@ -10,5 +10,12 @@ interface UsageRepository : JpaRepository<Usage, UUID> {
     @Query("select distinct usage.endpointId from Usage usage where usage.mappings is empty")
     fun findUnmappedEndpoints(): List<String>
 
-
+    @Query("select new org.datausagetracing.service.usage.ServiceRequestCount(usage.endpointHost, usage.initiatorHost, count(usage)) from Usage usage group by usage.endpointHost, usage.initiatorHost")
+    fun countServiceRequests(): List<ServiceRequestCount>
 }
+
+data class ServiceRequestCount(
+    val endpointHost: String,
+    val initiatorHost: String,
+    val count: Long
+)
