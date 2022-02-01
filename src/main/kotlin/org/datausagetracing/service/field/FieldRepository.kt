@@ -10,4 +10,6 @@ interface FieldRepository : JpaRepository<Field, Int> {
 
     @Transactional
     fun deleteByName(name: String)
+
+    fun findAllByNameIn(names: List<String>): List<Field>
 }

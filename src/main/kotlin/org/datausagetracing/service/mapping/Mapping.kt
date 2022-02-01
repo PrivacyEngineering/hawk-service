@@ -9,13 +9,18 @@ class Mapping {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Int? = null
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     lateinit var endpointId: String
 
     @OneToMany(mappedBy = "mapping", cascade = [CascadeType.REMOVE])
     var fields: MutableList<MappingField> = mutableListOf()
 
-    @ManyToMany
-    @JoinColumn(name = "endpointId")
+    @OneToMany
+    @JoinColumn(
+        name = "endpointId",
+        referencedColumnName = "endpointId",
+        insertable = false,
+        updatable = false
+    )
     var usages: MutableList<Usage> = mutableListOf()
 }

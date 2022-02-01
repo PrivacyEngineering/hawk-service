@@ -14,6 +14,12 @@ class MappingField {
     lateinit var field: Field
 
     @Column(nullable = false)
+    lateinit var phase: String
+
+    @Column(nullable = false)
+    lateinit var namespace: String
+
+    @Column(nullable = false)
     lateinit var format: String
 
     @Column(nullable = false)

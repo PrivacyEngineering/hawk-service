@@ -7,7 +7,7 @@ import java.util.*
 interface UsageRepository : JpaRepository<Usage, UUID> {
     fun findAllByIdIn(ids: List<UUID>): List<Usage>
 
-    @Query("select distinct usage.endpointId from Usage usage where usage.mappings is empty")
+    @Query("select usage.endpointId from Usage usage where usage.mapping is null group by usage.endpointId")
     fun findUnmappedEndpoints(): List<String>
 
     @Query("select new org.datausagetracing.service.usage.ServiceRequestCount(usage.endpointHost, usage.initiatorHost, count(usage)) from Usage usage group by usage.endpointHost, usage.initiatorHost")

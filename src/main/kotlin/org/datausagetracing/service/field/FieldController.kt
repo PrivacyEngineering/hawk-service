@@ -7,7 +7,6 @@ import javax.validation.Valid
 
 @Validated
 @RestController
-@CrossOrigin(origins = ["http://localhost:3000"])
 @RequestMapping("/api/fields")
 class FieldController(private val fieldService: FieldService) {
     @GetMapping

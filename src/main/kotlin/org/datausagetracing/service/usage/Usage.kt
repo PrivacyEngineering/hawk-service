@@ -11,16 +11,16 @@ class Usage {
     @Id
     lateinit var id: UUID
 
-    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     var clientRequestTimestamp: ZonedDateTime? = null
 
-    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     var clientResponseTimestamp: ZonedDateTime? = null
 
-    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     var serverRequestTimestamp: ZonedDateTime? = null
 
-    @Column(columnDefinition= "TIMESTAMP WITH TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     var serverResponseTimestamp: ZonedDateTime? = null
 
     var endpointId: String? = null
@@ -43,7 +43,6 @@ class Usage {
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
     var tags: MutableList<Tag> = mutableListOf()
 
-    @ManyToMany
-    @JoinColumn(name = "endpointId")
-    var mappings: MutableList<Mapping> = mutableListOf()
+    @ManyToOne
+    var mapping: Mapping? = null
 }
