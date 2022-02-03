@@ -4,7 +4,7 @@ interface QueryResult
 
 data class TimeSeriesQueryResult(
     val target: String,
-    val datapoints: List<Array<Int>>
+    val datapoints: List<Array<Long>>
 ) : QueryResult
 
 data class TableQueryResult(

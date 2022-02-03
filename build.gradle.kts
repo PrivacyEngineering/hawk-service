@@ -46,5 +46,7 @@ tasks.withType<Test> {
 
 dockerCompose {
     useComposeFiles.add("src/docker/postgresql/postgresql.yml")
+    useComposeFiles.add("src/docker/grafana/grafana.yml")
     startedServices.add("postgresql")
+    startedServices.add("grafana")
 }
