@@ -8,6 +8,7 @@ import javax.validation.Valid
 @Validated
 @RestController
 @RequestMapping("/api/mappings")
+@CrossOrigin(origins = arrayOf("*"))
 class MappingController(
     val mappingService: MappingService
 ) {
