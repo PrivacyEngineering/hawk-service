@@ -30,7 +30,9 @@ class QueryTarget {
     lateinit var target: String
     var refId: String? = null
     var type: String? = null
-    var data: Any? = null
+    var payload: Any? = null
+
+    fun payload(name: String): Any? = (payload as? Map<*, *>)?.get(name)
 }
 
 class AdhocFilter {

@@ -1,9 +1,6 @@
-package org.datausagetracing.service.grafana.handler
+package org.datausagetracing.service.grafana.handler.timeseries
 
-import org.datausagetracing.service.grafana.MetricHandler
-import org.datausagetracing.service.grafana.QueryRequest
-import org.datausagetracing.service.grafana.QueryResult
-import org.datausagetracing.service.grafana.TimeSeriesQueryResult
+import org.datausagetracing.service.grafana.*
 import org.datausagetracing.service.usage.ExplicitUsageRepository
 import org.datausagetracing.service.usage.UsageRepository
 import org.springframework.stereotype.Service
@@ -15,8 +12,8 @@ class RequestsTimeMetricHandler(
 ) : MetricHandler {
     override val target = "requests_time"
 
-    override fun query(request: QueryRequest): List<QueryResult> {
-        val endpoint = request.findFilter("endpointId")
+    override fun query(request: QueryRequest, target: QueryTarget): List<QueryResult> {
+        val endpoint = target.payload("endpoint") as? String
 
         if (endpoint != null) {
             return listOf(TimeSeriesQueryResult(
@@ -53,14 +50,5 @@ class RequestsTimeMetricHandler(
                     }
             )
         )
-    }
-
-    override val adhocKeys: Map<String, String> = mapOf("endpointId" to "string")
-
-    override fun adhocValues(key: String): List<String> {
-        if (key == "endpointId") {
-            return usageRepository.findEndpoints()
-        }
-        return emptyList()
     }
 }
