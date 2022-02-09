@@ -12,15 +12,20 @@ class GrafanaController(
 
     @PostMapping("/search")
     fun search(@RequestBody input: Map<String, String>): List<String> {
-        return handlers.map(MetricHandler::target)
+        val target = input["target"].takeUnless { it == "" } ?: return handlers.map(MetricHandler::target)
+
+        return handlers
+            .filter { it.target == target }
+            .flatMap { it.search() }
     }
 
     @PostMapping("/query")
     fun query(@RequestBody request: QueryRequest): List<QueryResult> {
         if(request.from() == null || request.to() == null) return emptyList()
         return handlers
-            .filter { handler -> request.targets.any { it.target == handler.target } }
-            .flatMap { it.query(request) }
+            .map { it to request.targets.firstOrNull { target -> it.target == target.target } }
+            .filterNot { it.second == null }
+            .flatMap { it.first.query(request, it.second!!) }
     }
 
     @PostMapping("/tag-keys")

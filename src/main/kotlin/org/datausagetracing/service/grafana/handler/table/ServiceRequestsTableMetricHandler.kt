@@ -1,26 +1,26 @@
-package org.datausagetracing.service.grafana.handler
+package org.datausagetracing.service.grafana.handler.table
 
 import org.datausagetracing.service.grafana.*
 import org.datausagetracing.service.usage.UsageRepository
 import org.springframework.stereotype.Service
 
 @Service
-class EndpointRequestsTableMetricHandler(
+class ServiceRequestsTableMetricHandler(
     private val usageRepository: UsageRepository
 ): MetricHandler {
-    override val target = "endpoint_requests_table"
+    override val target = "service_requests_table"
 
-    override fun query(request: QueryRequest): List<QueryResult> {
+    override fun query(request: QueryRequest, target: QueryTarget): List<QueryResult> {
         return listOf(
             TableQueryResult(
                 listOf(
-                    TableColumn("endpoint", "string"),
+                    TableColumn("service", "string"),
                     TableColumn("requests", "number")
                 ),
-                usageRepository.countEndpointRequests(request.from()!!, request.to()!!)
+                usageRepository.countServiceRequests(request.from()!!, request.to()!!)
                     .map {
                         arrayOf(
-                            it.endpoint as Any,
+                            it.service as Any,
                             it.count as Any
                         )
                     }

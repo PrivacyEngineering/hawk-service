@@ -9,7 +9,9 @@ interface MetricHandler {
      */
     val adhocKeys: Map<String, String> get() = emptyMap()
 
-    fun query(request: QueryRequest): List<QueryResult> = emptyList()
+    fun search(): List<String> = emptyList()
+
+    fun query(request: QueryRequest, target: QueryTarget): List<QueryResult> = emptyList()
 
     fun adhocValues(key: String): List<String> = emptyList()
 }
