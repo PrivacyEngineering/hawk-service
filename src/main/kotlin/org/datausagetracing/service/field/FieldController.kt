@@ -1,5 +1,6 @@
 package org.datausagetracing.service.field
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -11,18 +12,23 @@ import javax.validation.Valid
 @CrossOrigin(origins = arrayOf("*"))
 class FieldController(private val fieldService: FieldService) {
     @GetMapping
+    @Operation(description = "List all fields")
     fun list() = fieldService.listFields()
 
     @GetMapping("/{name}")
+    @Operation(description = "Get single existing field")
     fun show(@PathVariable name: String) = fieldService.showField(name)
 
     @PostMapping
+    @Operation(description = "Create single field")
     fun create(@Valid request: FieldRequest) = fieldService.insertField(request)
 
     @PutMapping
+    @Operation(description = "Update single existing field")
     fun update(@Valid request: FieldRequest) = fieldService.updateField(request)
 
     @DeleteMapping("/{name}")
+    @Operation(description = "Delete single existing field")
     fun delete(@PathVariable name: String) = fieldService.deleteField(name)
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

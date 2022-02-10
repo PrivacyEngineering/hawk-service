@@ -1,7 +1,6 @@
 package org.datausagetracing.service.field
 
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
@@ -14,9 +13,18 @@ class FieldRequest {
     @Size(max = 255)
     var description: String? = ""
 
-    @NotNull
-    var personalData: Boolean = false
+    var personalData: Boolean? = false
 
-    @NotNull
-    var specialCategoryPersonalData: Boolean = false
+    var specialCategoryPersonalData: Boolean? = false
+
+    var legalBases: MutableList<LegalBase> = mutableListOf()
+
+    var legalRequirement: Boolean? = false
+
+    var contractualRegulation: Boolean? = false
+
+    var obligationToProvide: Boolean? = false
+
+    var consequences: String? = ""
 }
+

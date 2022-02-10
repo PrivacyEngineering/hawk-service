@@ -29,8 +29,14 @@ class FieldService(
 
     private fun Field.apply(request: FieldRequest) {
         name = request.name.lowercase()
-        if (request.description != null) description = request.description
-        personalData = request.personalData
-        specialCategoryPersonalData = request.specialCategoryPersonalData
+
+        request.description?.also { description = it }
+        request.personalData?.also { personalData = it }
+        request.specialCategoryPersonalData?.also { specialCategoryPersonalData = it }
+        legalBases = request.legalBases
+        request.legalRequirement?.also { legalRequirement = it }
+        request.contractualRegulation?.also { contractualRegulation = it }
+        request.obligationToProvide?.also { obligationToProvide = it }
+        request.consequences?.also { consequences = it }
     }
 }

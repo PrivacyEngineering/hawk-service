@@ -24,6 +24,10 @@ class MappingService(
 
         val mapping = Mapping()
         mapping.endpointId = request.endpointId
+        mapping.purposes = request.purposes
+        mapping.legitimateInterests = request.legitimateInterests
+        mapping.recipients = request.recipients
+        mapping.storage = request.storage
         mappingRepository.saveAndFlush(mapping)
 
         mapping.fields = request.fields.mapNotNull {
@@ -42,6 +46,10 @@ class MappingService(
     fun updateMapping(request: MappingUpdateRequest) {
         val mapping = mappingRepository.findByEndpointId(request.endpointId)
             ?: error("Mapping with endpoint id ${request.endpointId} does not exist")
+        mapping.purposes = request.purposes
+        mapping.legitimateInterests = request.legitimateInterests
+        mapping.recipients = request.recipients
+        mapping.storage = request.storage
 
         val requestFields = request.fields.associateBy(MappingFieldUpdateRequest::id)
 

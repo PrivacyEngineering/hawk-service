@@ -1,6 +1,7 @@
 package org.datausagetracing.service.usage.insert
 
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import io.swagger.v3.oas.annotations.media.Schema
 import java.time.ZonedDateTime
 import java.util.*
 import javax.validation.constraints.Min
@@ -10,17 +11,23 @@ import javax.validation.constraints.Size
 
 class UsageRequest {
     @NotNull
+    @Schema(description = "unique identifier of the request/response")
     @Pattern(regexp = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
     lateinit var id: String
 
+    @Schema(description = "Required Information about the sender of this usage")
     lateinit var metadata: MetadataRequest
 
+    @Schema(description = "Information about the server and endpoint")
     lateinit var endpoint: EndpointRequest
 
+    @Schema(description = "Information about the initiator of the request")
     lateinit var initiator: InitiatorRequest
 
+    @Schema(description = "Extracted atomic value references of the messages data")
     var fields: MutableList<FieldRequest> = mutableListOf()
 
+    @Schema(description = "Additional information that is associated with this usage")
     lateinit var tags: TagsRequest
 
     fun uuid(): UUID = UUID.fromString(id)
@@ -38,7 +45,9 @@ class MetadataRequest {
     lateinit var phase: Phase
 
     @NotNull
+    @Schema(description = "Date and time when the request was captured, use zoned ISO Date Time if possible")
     lateinit var timestamp: ZonedDateTime
+
     override fun toString(): String {
         return "Metadata(side=$side, phase=$phase, timestamp=$timestamp)"
     }
@@ -46,12 +55,15 @@ class MetadataRequest {
 
 class EndpointRequest {
     @Size(max = 255)
+    @Schema(description = "indexed identifier to uniquely identify this specific endpoint. In case of http this should be http:<method>:<host>:<path>, must be sent at some point")
     var id: String? = null
 
     @Size(max = 255)
+    @Schema(description = "destination host name, must be sent at some point")
     var host: String? = null
 
     @Size(max = 255)
+    @Schema(description = "example http, must be sent at some point")
     var protocol: String? = null
 
     @JsonAnySetter
@@ -63,6 +75,7 @@ class EndpointRequest {
 }
 
 class InitiatorRequest {
+    @Schema(description = "requestor host name, must be sent at some point")
     var host: String? = null
 
     @JsonAnySetter
@@ -76,18 +89,22 @@ class InitiatorRequest {
 class FieldRequest {
     @NotNull
     @Size(max = 255)
+    @Schema(description = "format extracted e.g. properties, json, yaml, xml")
     lateinit var format: String
 
     @NotNull
     @Size(max = 255)
+    @Schema(description = "The namespace in which the data is located, e.g. in case of http header / body")
     lateinit var namespace: String
 
     @NotNull
     @Size(max = 255)
+    @Schema(description = "parsed expression from the origin (xpath, jsonpath)")
     lateinit var path: String
 
     @Min(1)
     @NotNull
+    @Schema(description = "How often that atomic value reference occured")
     var count: Int = 0
 
     override fun toString(): String {

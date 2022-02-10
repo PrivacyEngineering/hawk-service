@@ -10,7 +10,15 @@ class MappingInsertRequest {
     @Size(min = 1, max = 255)
     lateinit var endpointId: String
 
-    var fields: List<MappingFieldInsertRequest> = mutableListOf()
+    var purposes: MutableList<Purpose> = mutableListOf()
+
+    var legitimateInterests: MutableList<String> = mutableListOf()
+
+    var recipients: MutableList<String> = mutableListOf()
+
+    var storage: MutableList<Storage> = mutableListOf()
+
+    var fields: MutableList<MappingFieldInsertRequest> = mutableListOf()
 }
 
 class MappingFieldInsertRequest {
@@ -44,7 +52,15 @@ class MappingUpdateRequest {
     @Size(min = 1, max = 255)
     lateinit var endpointId: String
 
-    var fields: List<MappingFieldUpdateRequest> = mutableListOf()
+    var purposes: MutableList<Purpose> = mutableListOf()
+
+    var legitimateInterests: MutableList<String> = mutableListOf()
+
+    var recipients: MutableList<String> = mutableListOf()
+
+    var storage: MutableList<Storage> = mutableListOf()
+
+    var fields: MutableList<MappingFieldUpdateRequest> = mutableListOf()
 }
 
 class MappingFieldUpdateRequest {
@@ -72,3 +88,4 @@ class MappingFieldUpdateRequest {
     @Size(min = 1, max = 255)
     lateinit var path: String
 }
+
