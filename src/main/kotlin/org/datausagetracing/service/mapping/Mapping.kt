@@ -36,11 +36,5 @@ class Mapping {
     var fields: MutableList<MappingField> = mutableListOf()
 
     @OneToMany
-    @JoinColumn(
-        name = "endpointId",
-        referencedColumnName = "endpointId",
-        insertable = false,
-        updatable = false
-    )
     var usages: MutableList<Usage> = mutableListOf()
 }

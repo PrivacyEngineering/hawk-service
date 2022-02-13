@@ -43,6 +43,14 @@ class Usage {
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.REMOVE])
     var tags: MutableList<Tag> = mutableListOf()
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "endpointId",
+        referencedColumnName = "endpointId",
+        insertable = false,
+        updatable = false,
+        nullable = true,
+        foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
+    )
     var mapping: Mapping? = null
 }
