@@ -12,10 +12,14 @@ class UsageInsertService(
     private val fieldRepository: UsageFieldRepository,
     private val tagRepository: TagRepository,
     private val endpointPropertyRepository: EndpointPropertyRepository,
-    private val initiatorPropertyRepository: InitiatorPropertyRepository
+    private val initiatorPropertyRepository: InitiatorPropertyRepository,
+    private val usageRequestListeners: List<UsageRequestListener>
 ) {
     @Transactional
     fun insertUsage(request: UsageRequest) {
+        // Run listeners to eventually modify usage
+        usageRequestListeners.forEach { it.modifyUsage(request) }
+
         // Find existing Usage or create new one.
         val usage = usageRepository.findByIdOrNull(request.uuid()) ?: Usage()
         doInsertUsage(usage, listOf(request))
@@ -23,6 +27,9 @@ class UsageInsertService(
 
     @Transactional
     fun insertUsages(requests: List<UsageRequest>) {
+        // Run listeners to eventually modify usages
+        requests.forEach { request -> usageRequestListeners.forEach { it.modifyUsage(request) } }
+
         // Find all existing Usages of the list of requests.
         val existingUsages = usageRepository
             .findAllByIdIn(requests.map(UsageRequest::uuid))

@@ -14,6 +14,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     maven { url = uri("https://repo.spring.io/release") }
+    maven { url = uri("https://jitpack.io")}
     mavenCentral()
 }
 
@@ -29,6 +30,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.6")
+    implementation("com.github.fkorotkov:k8s-kotlin-dsl:3.1.1")
+    implementation("io.fabric8:kubernetes-client:5.0.1")
+    implementation("org.springframework.metrics:spring-metrics:latest.release")
+    implementation("io.prometheus:simpleclient_common:latest.release")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

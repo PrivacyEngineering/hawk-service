@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.metrics.export.prometheus.EnablePrometheusMetrics
+import org.springframework.scheduling.annotation.EnableScheduling
 
 @OpenAPIDefinition(
     info = Info(
@@ -11,7 +13,9 @@ import org.springframework.boot.runApplication
         version = "1.1.0"
     )
 )
+@EnableScheduling
 @SpringBootApplication
+@EnablePrometheusMetrics
 class DataUsageTracingServiceApplication
 
 fun main(args: Array<String>) {
