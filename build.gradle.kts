@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "org.datausagetracing"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -32,8 +32,8 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.6")
     implementation("com.github.fkorotkov:k8s-kotlin-dsl:3.1.1")
     implementation("io.fabric8:kubernetes-client:5.0.1")
-    implementation("org.springframework.metrics:spring-metrics:latest.release")
-    implementation("io.prometheus:simpleclient_common:latest.release")
+    implementation("org.springframework.metrics:spring-metrics:spring-metrics:0.5.1.RELEASE")
+    implementation("io.prometheus:simpleclient_common:0.15.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -45,6 +45,11 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName = "europe-west3-docker.pkg.dev/cnpe-blue/sockshop/hawk-service:${project.version}"
+    targetJavaVersion.set(JavaVersion.VERSION_11)
 }
 
 tasks.withType<Test> {
