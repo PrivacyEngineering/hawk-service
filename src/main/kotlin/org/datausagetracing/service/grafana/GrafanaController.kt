@@ -3,7 +3,6 @@ package org.datausagetracing.service.grafana
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@CrossOrigin(origins = arrayOf("*"))
 class GrafanaController(
     val handlers: List<MetricHandler>
 ) {

@@ -1,8 +1,8 @@
 package org.datausagetracing.service.release
 
+import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.Collector
 import org.datausagetracing.service.usage.UsageRepository
-import org.springframework.metrics.instrument.prometheus.PrometheusMeterRegistry
 import org.springframework.stereotype.Service
 
 @Service
