@@ -5,12 +5,14 @@ import io.fabric8.kubernetes.client.Watcher
 import io.fabric8.kubernetes.client.WatcherException
 import org.springframework.boot.autoconfigure.condition.ConditionalOnCloudPlatform
 import org.springframework.boot.cloud.CloudPlatform
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import javax.annotation.PostConstruct
 
 @Service
+@Profile("flagger-canary")
 @ConditionalOnCloudPlatform(CloudPlatform.KUBERNETES)
 class CanaryWatcherService(
     private val kubernetesClient: KubernetesClient,
