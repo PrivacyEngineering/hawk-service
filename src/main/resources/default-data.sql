@@ -22,8 +22,8 @@ insert into field (id, name, personal_data, special_category_personal_data, cont
 values (11,'Creditcard CCV', true, false, false, false, false);
 
 -- mapping_field
--- create sequence seq_mapping_field;
--- select nextval('seq_mapping_field')
+create sequence seq_mapping_field;
+
 INSERT INTO mapping_field (id,phase,path,field_id, format,namespace,endpoint_id)
 values
     (nextval('seq_mapping_field'),'REQUEST', '$.card.longNum', 9, 'json', 'body', 'http:POST:payment:/paymentAuth'),
