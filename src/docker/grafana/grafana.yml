@@ -3,7 +3,7 @@ services:
   grafana:
     image: "grafana/grafana"
     environment:
-      GF_INSTALL_PLUGINS: simpod-json-datasource,novatec-sdg-panel
+      GF_INSTALL_PLUGINS: simpod-json-datasource 0.3.0,novatec-sdg-panel
     volumes:
       - grafana-storage:/var/lib/grafana
     ports:

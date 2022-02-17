@@ -11,16 +11,16 @@ const val packagePrefix: String = "org.datausagetracing.service.usage"
 interface UsageRepository : JpaRepository<Usage, UUID> {
     fun findAllByIdIn(ids: List<UUID>): List<Usage>
 
-    @Query("select count(usage) from Usage usage where (usage.clientRequestTimestamp > ?2 or usage.serverRequestTimestamp > ?2) and usage.endpointHost = ?1 and usage.mapping is null group by usage.endpointHost")
+    @Query("select count(usage) from Usage usage left join Mapping mapping on usage.endpointId = mapping.endpointId where (usage.clientRequestTimestamp > ?2 or usage.serverRequestTimestamp > ?2) and usage.endpointHost = ?1 and mapping.endpointId is null group by usage.endpointHost")
     fun findUnmappedCount(host: String, after: LocalDateTime): Long?
 
-    @Query("select count(usage) from Usage usage where (usage.clientRequestTimestamp > ?2 or usage.serverRequestTimestamp > ?2) and usage.endpointHost = ?1 and usage.mapping is not null group by usage.endpointHost")
+    @Query("select count(usage) from Usage usage inner join Mapping mapping on usage.endpointId = mapping.endpointId where (usage.clientRequestTimestamp > ?2 or usage.serverRequestTimestamp > ?2) and usage.endpointHost = ?1 group by usage.endpointHost")
     fun findMappedCount(host: String, after: LocalDateTime): Long?
 
     @Query("select usage.endpointId from Usage usage group by usage.endpointId")
     fun findEndpoints(): List<String>
 
-    @Query("select usage.endpointId from Usage usage where usage.mapping is null group by usage.endpointId")
+    @Query("select usage.endpointId from Usage usage left join Mapping mapping on usage.endpointId = mapping.endpointId where mapping.endpointId is null group by usage.endpointId")
     fun findUnmappedEndpoints(): List<String>
 
     @Query("select new ${packagePrefix}.ServiceInitiatorRequestCount(usage.endpointHost, usage.initiatorHost, count(usage)) from Usage usage where (usage.clientRequestTimestamp between :from and :to) or (usage.serverRequestTimestamp between :from and :to) group by usage.endpointHost, usage.initiatorHost")

@@ -34,15 +34,4 @@ class MappingField {
     @JsonIgnore
     @JoinColumn(name = "endpoint_id", referencedColumnName = "endpointId")
     lateinit var mapping: Mapping
-
-    @ManyToMany
-    @JsonIgnore
-    @JoinColumnsOrFormulas(
-        JoinColumnOrFormula(formula = JoinFormula("(SELECT u.endpoint_id FROM usage u WHERE u.id = usage_id)", referencedColumnName = "endpointId")),
-        JoinColumnOrFormula(column = JoinColumn(name = "phase", referencedColumnName = "phase")),
-        JoinColumnOrFormula(column = JoinColumn(name = "namespace", referencedColumnName = "namespace")),
-        JoinColumnOrFormula(column = JoinColumn(name = "format", referencedColumnName = "format")),
-        JoinColumnOrFormula(column = JoinColumn(name = "path", referencedColumnName = "path"))
-    )
-    lateinit var usageFields: List<UsageField>
 }

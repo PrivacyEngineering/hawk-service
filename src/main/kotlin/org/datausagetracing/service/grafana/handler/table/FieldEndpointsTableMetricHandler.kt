@@ -5,24 +5,21 @@ import org.datausagetracing.service.grafana.*
 import org.springframework.stereotype.Service
 
 @Service
-class FieldRequestsTableMetricHandler(
+class FieldEndpointsTableMetricHandler(
     private val fieldRepository: ExplicitFieldRepository
 ) : MetricHandler {
-    override val target = "field_requests"
+    override val target = "field_endpoints"
 
     override fun query(request: QueryRequest, target: QueryTarget): List<QueryResult> {
-        val fields = target.payload("fields") as? List<String> ?: return emptyList()
-        if(fields.isEmpty()) return emptyList();
+        val field = target.payload("field") as? String
+        if (field == null || field.isEmpty()) return emptyList()
 
         return listOf(
             TableQueryResult(
                 listOf(
-                    TableColumn("field", "string"),
-                    TableColumn("requests", "number")
+                    TableColumn("endpoint", "string")
                 ),
-                fieldRepository.fieldRequests(fields.toTypedArray()).map {
-                    arrayOf(it.key, it.value)
-                }
+                fieldRepository.fieldEndpoints(field).map { arrayOf(it) }
             )
         )
     }

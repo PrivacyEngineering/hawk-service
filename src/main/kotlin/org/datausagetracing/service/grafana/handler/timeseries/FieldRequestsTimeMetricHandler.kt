@@ -12,6 +12,7 @@ class FieldRequestsTimeMetricHandler(
 
     override fun query(request: QueryRequest, target: QueryTarget): List<QueryResult> {
         val fields = target.payload("fields") as? List<String> ?: return emptyList()
+        if(fields.isEmpty()) return emptyList()
 
         return listOf(TimeSeriesQueryResult(
             "requests",

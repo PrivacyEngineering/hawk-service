@@ -1,7 +1,6 @@
 package org.datausagetracing.service.mapping
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import org.datausagetracing.service.usage.Usage
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 import javax.persistence.*
@@ -34,7 +33,4 @@ class Mapping {
 
     @OneToMany(mappedBy = "mapping", cascade = [CascadeType.REMOVE])
     var fields: MutableList<MappingField> = mutableListOf()
-
-    @OneToMany
-    var usages: MutableList<Usage> = mutableListOf()
 }

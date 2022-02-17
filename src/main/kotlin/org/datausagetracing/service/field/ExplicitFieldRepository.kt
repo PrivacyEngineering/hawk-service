@@ -1,6 +1,7 @@
 package org.datausagetracing.service.field
 
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.query
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
 import java.time.ZonedDateTime
@@ -9,6 +10,24 @@ import java.time.ZonedDateTime
 class ExplicitFieldRepository(
     private val jdbcTemplate: JdbcTemplate
 ) {
+    fun fieldEndpoints(fieldName: String): List<String> {
+        return jdbcTemplate.query<List<String>>(
+            """
+                SELECT endpoint_id 
+                FROM field 
+                LEFT JOIN mapping_field mf on field.id = mf.field_id 
+                WHERE name = ? 
+                GROUP BY endpoint_id;
+            """, arrayOf(fieldName)
+        ) { it: ResultSet ->
+            val endpoints = mutableListOf<String>()
+            while(it.next()) {
+                endpoints.add(it.getString(1))
+            }
+            return@query endpoints
+        } ?: emptyList()
+    }
+
     fun fieldRequests() : Map<String, Long> {
         return jdbcTemplate.query<Map<String, Long>>(
         """
