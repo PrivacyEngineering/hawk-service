@@ -21,9 +21,9 @@ class MetricService(
                     .distinctBy { it.first }
                     .toMap()
                 val unmappedCount = services
-                    .mapValues { usageRepository.findUnmappedCount("${it.key}-canary", it.value) }
+                    .mapValues { usageRepository.findUnmappedCount("${it.key}", it.value) }
                 val mappedCount = services
-                    .mapValues { usageRepository.findMappedCount("${it.key}-canary", it.value) }
+                    .mapValues { usageRepository.findMappedCount("${it.key}", it.value) }
 
                 return services.keys.map {
                     val mapped = mappedCount[it]?.toDouble() ?: 0.0
@@ -34,7 +34,7 @@ class MetricService(
                     if (unmapped == 0.0)
                         createMetric("hawk.$it.unmapped.ratio", 0.0)
                     else
-                        createMetric("hawk.$it.unmapped.ratio", (mapped + unmapped) / unmapped)
+                        createMetric("hawk.$it.unmapped.ratio", (unmapped * 100) / (mapped + unmapped)
 
                 }.toMutableList()
             }
