@@ -34,7 +34,7 @@ class MetricService(
                     if (unmapped == 0.0)
                         createMetric("hawk.$it.unmapped.ratio", 0.0)
                     else
-                        createMetric("hawk.$it.unmapped.ratio", (unmapped * 100) / (mapped + unmapped)
+                        createMetric("hawk.$it.unmapped.ratio", (unmapped * 100) / (mapped + unmapped))
 
                 }.toMutableList()
             }
