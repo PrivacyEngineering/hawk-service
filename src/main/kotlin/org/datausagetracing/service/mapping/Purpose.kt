@@ -1,6 +1,6 @@
 package org.datausagetracing.service.mapping
 
-class Purpose {
+class Purpose : java.io.Serializable {
     var purpose: String? = null
 
     var description: String? = null

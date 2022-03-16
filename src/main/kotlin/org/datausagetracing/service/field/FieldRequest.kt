@@ -26,5 +26,19 @@ class FieldRequest {
     var obligationToProvide: Boolean? = false
 
     var consequences: String? = ""
+
+    fun equalsField(other: Field): Boolean {
+        other.also {
+            if(name != other.name) return false
+            if(description != other.description) return false
+            if(specialCategoryPersonalData != other.specialCategoryPersonalData) return false
+            if(legalBases != other.legalBases) return false
+            if(legalRequirement != other.legalRequirement) return false
+            if(contractualRegulation != other.contractualRegulation) return false
+            if(obligationToProvide != other.obligationToProvide) return false
+            if(consequences != other.consequences) return false
+            return true
+        }
+    }
 }
 

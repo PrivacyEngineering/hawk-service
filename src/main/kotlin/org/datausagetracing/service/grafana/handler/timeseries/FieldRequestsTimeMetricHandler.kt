@@ -21,7 +21,7 @@ class FieldRequestsTimeMetricHandler(
                 request.to()!!,
                 request.intervalMs,
                 fields.toTypedArray()
-            )
+            ).toSortedMap()
                 .map {
                     arrayOf(
                         it.value,

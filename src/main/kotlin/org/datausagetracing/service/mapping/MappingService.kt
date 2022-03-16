@@ -51,7 +51,9 @@ class MappingService(
         mapping.recipients = request.recipients
         mapping.storage = request.storage
 
-        val requestFields = request.fields.associateBy(MappingFieldUpdateRequest::id)
+        val requestFields = request.fields
+            .filterNot { it.id == null || it.id == 0 }
+            .associateBy(MappingFieldUpdateRequest::id)
 
         mapping.fields.forEach {
             val requestField = requestFields[it.id] ?: run {
@@ -60,37 +62,37 @@ class MappingService(
             }
             var update = false
 
-            if(it.phase != requestField.phase) {
+            if (it.phase != requestField.phase) {
                 it.phase = requestField.phase
                 update = true
             }
 
-            if(it.namespace != requestField.namespace) {
+            if (it.namespace != requestField.namespace) {
                 it.namespace = requestField.namespace
                 update = true
             }
 
-            if(it.format != requestField.format) {
+            if (it.format != requestField.format) {
                 it.format = requestField.format
                 update = true
             }
 
-            if(it.path != requestField.path) {
+            if (it.path != requestField.path) {
                 it.path = requestField.path
                 update = true
             }
 
-            if(update) mappingFieldRepository.save(it)
+            if (update) mappingFieldRepository.save(it)
         }
 
-        val newFieldIds = (requestFields.keys - mapping.fields.map(MappingField::id))
-        val newFieldNames = newFieldIds.mapNotNull { requestFields[it]?.field }.distinct()
+        val newFields = request.fields
+            .filter { it.id == null || it.id == 0 }
+
         val foundFields = fieldRepository
-            .findAllByNameIn(newFieldNames)
+            .findAllByNameIn(newFields.map { it.field }.distinct())
             .associateBy { it.name }
 
-        newFieldIds.mapNotNull {
-            val requestField = requestFields[it] ?: return@mapNotNull null
+        newFields.mapNotNull { requestField ->
             val mappingField = MappingField()
             mappingField.field = foundFields[requestField.field] ?: return@mapNotNull null
             mappingField.phase = requestField.phase

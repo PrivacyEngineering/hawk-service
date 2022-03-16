@@ -14,19 +14,19 @@ class MappingController(
 ) {
     @GetMapping
     @Operation(description = "List mappings")
-    fun list() = mappingService.listMappings()
+    fun list() = mappingService.listMappings().map(::MappingPresentation)
 
     @GetMapping("/{id}")
     @Operation(description = "Get single existing mapping")
-    fun show(@PathVariable id: Int) = mappingService.showMapping(id)
+    fun show(@PathVariable id: Int) = mappingService.showMapping(id).let(::MappingPresentation)
 
     @PostMapping
     @Operation(description = "Create single mapping")
-    fun create(@Valid request: MappingInsertRequest) = mappingService.insertMapping(request)
+    fun create(@Valid @RequestBody request: MappingInsertRequest) = mappingService.insertMapping(request)
 
     @PutMapping
     @Operation(description = "Update single existing mapping")
-    fun update(@Valid request: MappingUpdateRequest) = mappingService.updateMapping(request)
+    fun update(@Valid @RequestBody request: MappingUpdateRequest) = mappingService.updateMapping(request)
 
     @DeleteMapping("/{id}")
     @Operation(description = "Delete single existing mapping")

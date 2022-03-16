@@ -2,10 +2,6 @@ package org.datausagetracing.service.mapping
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.datausagetracing.service.field.Field
-import org.datausagetracing.service.usage.UsageField
-import org.hibernate.annotations.JoinColumnOrFormula
-import org.hibernate.annotations.JoinColumnsOrFormulas
-import org.hibernate.annotations.JoinFormula
 import javax.persistence.*
 
 @Entity

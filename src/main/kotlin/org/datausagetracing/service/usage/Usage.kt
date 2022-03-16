@@ -1,6 +1,5 @@
 package org.datausagetracing.service.usage
 
-import org.datausagetracing.service.mapping.Mapping
 import java.time.ZonedDateTime
 import java.util.*
 import javax.persistence.*

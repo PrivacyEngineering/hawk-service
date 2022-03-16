@@ -23,7 +23,7 @@ class RequestsTimeMetricHandler(
                     request.to()!!,
                     request.intervalMs,
                     endpoint
-                )
+                ).toSortedMap()
                     .map {
                         arrayOf(
                             it.value,

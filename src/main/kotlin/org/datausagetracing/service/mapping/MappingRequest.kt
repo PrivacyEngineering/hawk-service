@@ -1,8 +1,6 @@
 package org.datausagetracing.service.mapping
 
-import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 class MappingInsertRequest {
@@ -19,6 +17,11 @@ class MappingInsertRequest {
     var storage: MutableList<Storage> = mutableListOf()
 
     var fields: MutableList<MappingFieldInsertRequest> = mutableListOf()
+    override fun toString(): String {
+        return "MappingInsertRequest(endpointId='$endpointId', fields=$fields)"
+    }
+
+
 }
 
 class MappingFieldInsertRequest {
@@ -45,6 +48,11 @@ class MappingFieldInsertRequest {
     @NotBlank
     @Size(min = 1, max = 255)
     lateinit var path: String
+    override fun toString(): String {
+        return "MappingFieldInsertRequest(field='$field', side='$side', phase='$phase', namespace='$namespace', format='$format', path='$path')"
+    }
+
+
 }
 
 class MappingUpdateRequest {
@@ -64,9 +72,7 @@ class MappingUpdateRequest {
 }
 
 class MappingFieldUpdateRequest {
-    @Min(0)
-    @NotNull
-    var id: Int = 0
+    var id: Int? = 0
 
     @NotBlank
     @Size(min = 1, max = 255)

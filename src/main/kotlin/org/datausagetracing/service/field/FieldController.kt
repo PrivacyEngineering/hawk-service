@@ -20,11 +20,11 @@ class FieldController(private val fieldService: FieldService) {
 
     @PostMapping
     @Operation(description = "Create single field")
-    fun create(@Valid request: FieldRequest) = fieldService.insertField(request)
+    fun create(@Valid @RequestBody request: FieldRequest) = fieldService.insertField(request)
 
     @PutMapping
     @Operation(description = "Update single existing field")
-    fun update(@Valid request: FieldRequest) = fieldService.updateField(request)
+    fun update(@Valid @RequestBody request: FieldRequest) = fieldService.updateField(request)
 
     @DeleteMapping("/{name}")
     @Operation(description = "Delete single existing field")
