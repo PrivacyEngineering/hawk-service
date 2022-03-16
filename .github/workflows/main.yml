@@ -12,7 +12,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Login to GAR
+      - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: p4skal
@@ -24,6 +24,7 @@ jobs:
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
-
-      - name: Push to GAR
+      - name: Add latest tag
+        run: "docker tag p4skal/hawk-service:${{ github.ref_name }} p4skal/hawk-service:latest"
+      - name: Push to DockerHub
         run: docker push p4skal/hawk-service --all-tags
