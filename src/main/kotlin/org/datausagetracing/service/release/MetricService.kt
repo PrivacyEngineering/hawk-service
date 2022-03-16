@@ -34,13 +34,11 @@ class MetricService(
                     if (unmapped == 0.0)
                         createMetric("hawk.$it.unmapped.ratio", 0.0)
                     else
-                        createMetric("hawk.$it.unmapped.ratio", (unmapped*100) / (mapped+unmapped))
+                        createMetric("hawk.$it.unmapped.ratio", (unmapped * 100) / (mapped + unmapped))
 
                 }.toMutableList()
             }
         })
-
-        // hawk.serviceA.count 5
     }
 
     private fun createMetric(name: String, value: Double?) = Collector.MetricFamilySamples(
