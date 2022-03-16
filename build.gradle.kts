@@ -48,7 +48,6 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-    imageName = "europe-west3-docker.pkg.dev/cnpe-blue/sockshop/hawk-service:${project.version}"
     targetJavaVersion.set(JavaVersion.VERSION_11)
 }
 
