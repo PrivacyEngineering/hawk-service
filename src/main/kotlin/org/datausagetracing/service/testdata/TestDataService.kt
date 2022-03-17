@@ -1,5 +1,8 @@
 package org.datausagetracing.service.testdata
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
 import org.apache.logging.log4j.LogManager
 import org.datausagetracing.service.usage.*
 import org.springframework.context.annotation.Profile
@@ -7,6 +10,7 @@ import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
@@ -19,13 +23,15 @@ class TestDataService(
     private val endpointPropertyRepository: EndpointPropertyRepository
 ) {
     private val batches = 100
-    private val batchSize = 200
-    private val beginDate = ZonedDateTime.now().minusHours(1)
+    private val batchSize = 10
+    private val beginDate = ZonedDateTime.now().minusDays(1)
     private val endDate = ZonedDateTime.now().plusHours(1)
     private val dateDiff = endDate.toEpochSecond() - beginDate.toEpochSecond()
     private val minLatency = 4L
     private val maxLatency = 30L
     private val logger = LogManager.getLogger(javaClass)
+
+    private val testDataScope = CoroutineScope(Executors.newFixedThreadPool(1).asCoroutineDispatcher() + SupervisorJob())
 
     @PostConstruct
     fun insertRandomUsages() {
@@ -57,7 +63,7 @@ class TestDataService(
             endpointHost = endpoint.service
             endpointId = "http:${endpoint.method}:${endpoint.service}:${endpoint.path}"
             endpointProtocol = "HTTP"
-            initiatorHost = initiators.random()
+            initiatorHost = endpoint.initiators.random()
         }
         return Triple(usage, endpoint.getFields(usage), endpoint.getEndpointProperties(usage))
     }
@@ -78,10 +84,14 @@ class Endpoint(
     var path: String = "",
     var method: String = "",
     var requestFields: MutableSet<String> = mutableSetOf(),
-    var responseFields: MutableSet<String> = mutableSetOf()
+    var responseFields: MutableSet<String> = mutableSetOf(),
+    val initiators: MutableSet<String> = mutableSetOf()
 ) {
     private val rationToTakeField = 0.6
 
+    fun initiator(vararg name: String) {
+        initiators.addAll(name)
+    }
     fun request(vararg fields: String) {
         requestFields.addAll(fields)
     }
@@ -167,6 +177,7 @@ val endpoints = mutableSetOf(
         response("$.[*].last-name")
         response("$.[*].date-of-birth")
         response("$.[*].gender")
+        initiator("payment-service", "product-service", "front-end")
     },
     endpoint {
         service = "user-service"
@@ -184,12 +195,14 @@ val endpoints = mutableSetOf(
         request("$.card-ccv")
         request("$.card-expiry")
         response("$.id")
+        initiator("front-end")
     },
     endpoint {
         service = "user-service"
         path = "/api/users"
         method = "DELETE"
         request("$.id")
+        initiator("front-end")
     },
     endpoint {
         service = "newsletter-service"
@@ -199,6 +212,7 @@ val endpoints = mutableSetOf(
         request("$.[*].last-name")
         request("$.[*].gender")
         response("$.newsletter-id")
+        initiator("product-service", "user-service")
     },
     endpoint {
         service = "product-service"
@@ -209,6 +223,7 @@ val endpoints = mutableSetOf(
         response("$.[*].product.description")
         response("$.[*].product.stock")
         response("$.[*].price")
+        initiator("front-end")
     },
     endpoint {
         service = "product-service"
@@ -219,6 +234,7 @@ val endpoints = mutableSetOf(
         request("$.product.description")
         request("$.product.stock")
         request("$.price")
+        initiator("front-end")
     },
     endpoint {
         service = "payment-service"
@@ -237,5 +253,6 @@ val endpoints = mutableSetOf(
         request("$.user.card-expiry")
         request("$.products.[*].name")
         request("$.products.[*].price")
+        initiator("front-end", "product-service")
     }
 )
