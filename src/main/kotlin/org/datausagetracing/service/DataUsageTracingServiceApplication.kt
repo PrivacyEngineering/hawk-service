@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor
 
+
 @OpenAPIDefinition(
     info = Info(
         title = "Hawk-Service",
