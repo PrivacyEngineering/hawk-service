@@ -2,11 +2,10 @@
 
 ![workflow](https://github.com/PrivacyEngineering/hawk-service/actions/workflows/main.yml/badge.svg)
 
-The Hawk Service is a service exposing an HTTP / REST API written in Kotlin / Spring Boot.
-It serves as a managing component for Hawk Core and Hawk Release managing anything about the `Usage`
-, `Mapping` and `Field` entities.
-Because of its stateless design, it can be horizontally scaled requiring a robust enough Postgres
-Database in the backend.
+The Hawk Service is a service exposing an HTTP / REST API written in Kotlin / Spring Boot. It serves
+as a managing component for Hawk Core and Hawk Release managing anything about the `Usage`
+, `Mapping` and `Field` entities. Because of its stateless design, it can be horizontally scaled
+requiring a robust enough Postgres Database in the backend.
 
 For API
 reference: [SwaggerHub](https://app.swaggerhub.com/apis-docs/TUB-CNPE-TB/transparency-log-service/1.1.1)
@@ -65,10 +64,10 @@ The metrics are useful for Flagger.
 
 ## Installation
 
-For the Hawk Service to run you need to its mandatory to have a PostgreSQL Database connected.
-With smaller workloads Postgres itself is fine, for bigger workloads you might need some
-technologies like [YugabyteDB](https://github.com/yugabyte/yugabyte-db).
-Just pass the following environment variables:
+For the Hawk Service to run you need to its mandatory to have a PostgreSQL Database connected. With
+smaller workloads Postgres itself is fine, for bigger workloads you might need some technologies
+like [YugabyteDB](https://github.com/yugabyte/yugabyte-db). Just pass the following environment
+variables:
 
 ```properties
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/hawk
@@ -91,9 +90,60 @@ need:
 docker run -p 8080:8080 -e ENV1=1 ENV2=2 p4skal/hawk-service
 ```
 
+## Mapping / Field import from JSON
+
+Although we recommend to create Mappings / Fields with
+the [Hawk Core Monitor UI](https://github.com/PrivacyEngineering/hawk-core-monitor), when using IaaC
+you may want to specify the fields / mappings directly. On startup, this service will sync the
+updates. You have many possibilities to provide such entities, as they are provided
+via [Spring External Configuration](). The following things are described via. Environment variables.
+If you want to use Properties, JSON, YAML etc., see there.
+```dotenv
+FIELDS_JSON='[
+    {
+        "name": "user.email",
+        "description": "E-Mail address of the User",
+        "personalData": false,
+        "specialCategoryPersonalData": false,
+        "legalBases": [
+            {
+                "reference": "GDPR1", 
+                "description": ""
+            }
+        ]
+        "legalRequirement": false,
+        "contractualRegulation": false,
+        "obligationToProvide": false,
+        "consequences": ""
+    }
+]'
+MAPPINGS_JSON='[
+    {
+        endpointId: "http:GET:user-service:/api/users"
+        fields: [
+            {
+                field: "user.email",
+                side: "SERVER",
+                phase: "RESPONSE",
+                namespace: "body",
+                format: "json",
+                path: "$.[*].email"
+            }
+        ]
+    }
+]'
+```
+It is also possible insert those values one by one by using:
+```dotenv
+MAPPINGS_MAPPINGS_0_ENDPOINT_ID='http:GET:user-service:/api/users'
+MAPPINGS_MAPPINGS_0_FIELDS_0_FIELD='user.email'
+MAPPINGS_MAPPINGS_0_FIELDS_0_SIDE='...'
+FIELDS_FIELDS_0_NAME='user.email'
+```
+
 ## Random Usage Generation
 
-The Service features a limited Usage generation for Test data.
-Activate the profile `test-data` for that.
+The Service features a limited Usage generation for Test data. Activate the profile `test-data` for
+that.
 
 
