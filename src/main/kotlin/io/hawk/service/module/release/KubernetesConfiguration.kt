@@ -1,4 +1,4 @@
-package io.hawk.service.traffic.release
+package io.hawk.service.module.release
 
 import io.fabric8.kubernetes.client.DefaultKubernetesClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnCloudPlatform

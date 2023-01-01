@@ -1,26 +1,25 @@
-package io.hawk.service.traffic.release
+package io.hawk.service.module.release
 
 import io.fabric8.kubernetes.client.KubernetesClient
 import io.fabric8.kubernetes.client.Watcher
-import io.fabric8.kubernetes.client.WatcherException
+import io.hawk.service.module.ReconnectingWatcher
 import jakarta.annotation.PostConstruct
 import org.springframework.boot.autoconfigure.condition.ConditionalOnCloudPlatform
 import org.springframework.boot.cloud.CloudPlatform
 import org.springframework.context.annotation.Profile
-import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
-@Service
+@Component
 @Profile("flagger-canary")
 @ConditionalOnCloudPlatform(CloudPlatform.KUBERNETES)
-class CanaryWatcherService(
+class CanaryWatcher(
     private val kubernetesClient: KubernetesClient,
     private val releaseCollector: ReleaseCollector
-) : Watcher<Canary> {
+) : ReconnectingWatcher<Canary>() {
 
     @PostConstruct
-    fun initialize() {
+    override fun initialize() {
         val canaries = kubernetesClient
             .resources(Canary::class.java)
         canaries
@@ -31,9 +30,6 @@ class CanaryWatcherService(
         canaries.watch(this)
     }
 
-    @Scheduled(initialDelay = 5_000L)
-    private fun initializeWithDelay() = initialize()
-
     override fun eventReceived(action: Watcher.Action, canary: Canary) = when (action) {
         Watcher.Action.ADDED -> releaseCollector.startRelease(canary.createRelease())
         Watcher.Action.DELETED -> releaseCollector
@@ -41,8 +37,6 @@ class CanaryWatcherService(
 
         else -> Unit
     }
-
-    override fun onClose(cause: WatcherException) = initializeWithDelay()
 }
 
 fun Canary.createIdentifier() = TargetIdentifier(

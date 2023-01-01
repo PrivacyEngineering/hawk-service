@@ -1,4 +1,4 @@
-package io.hawk.service.traffic.release
+package io.hawk.service.module.release
 
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.Collector

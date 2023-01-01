@@ -1,4 +1,4 @@
-package io.hawk.service.traffic.release
+package io.hawk.service.module.release
 
 import org.springframework.context.ApplicationEvent
 import org.springframework.context.ApplicationEventPublisher
@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 class ReleaseCollector(
     private val eventPublisher: ApplicationEventPublisher
 ) {
-    val releases: MutableMap<TargetIdentifier, Release> = ConcurrentHashMap()
+    val releases = ConcurrentHashMap<TargetIdentifier, Release>()
 
     fun startRelease(release: Release) {
         releases[release.target] = release

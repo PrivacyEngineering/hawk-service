@@ -1,1 +1,1 @@
-rootProject.name = "data-usage-tracing-service"
+rootProject.name = "hawk-service"
