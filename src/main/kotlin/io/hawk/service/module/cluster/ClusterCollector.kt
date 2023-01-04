@@ -11,11 +11,16 @@ class ClusterCollector {
     private val services = ConcurrentHashMap.newKeySet<Service>()
     private val pods = ConcurrentHashMap.newKeySet<Pod>()
 
-    fun resolve(rawName: String) {
+    fun resolveAppName(rawName: String): String? {
         val namespace = rawName.substringBefore('.', "")
         val name = rawName.substringAfter('.')
 
-        // TODO
+        val result = (services + pods)
+            .filter { namespace.isEmpty() || it.metadata.namespace == namespace }
+            // TODO: add levenshtein distance comparison
+            .firstOrNull { it.metadata.name.startsWith(name) }
+
+        return result?.metadata?.labels?.get("hawk.io/app-name")
     }
 
     fun registerPod(pod: Pod) = pods.add(pod)
