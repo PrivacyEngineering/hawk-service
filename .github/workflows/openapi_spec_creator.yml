@@ -36,7 +36,7 @@ jobs:
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
       - name: Move openapi.json
-        run: ls bin && ls build
+        run: ls build
 
       - name: Commit & Push
         uses: stefanzweifel/git-auto-commit-action@v4
