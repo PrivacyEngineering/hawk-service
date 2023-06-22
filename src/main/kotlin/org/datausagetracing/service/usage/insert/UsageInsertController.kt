@@ -9,6 +9,7 @@ import javax.validation.Valid
 @Validated
 @RestController
 @RequestMapping("/api/usages")
+@CrossOrigin(origins = arrayOf("*"))
 class UsageInsertController(
     val usageService: UsageInsertService
 ) {

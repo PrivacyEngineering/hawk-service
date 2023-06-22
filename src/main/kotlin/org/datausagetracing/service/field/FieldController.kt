@@ -9,6 +9,7 @@ import javax.validation.Valid
 @Validated
 @RestController
 @RequestMapping("/api/fields")
+@CrossOrigin(origins = arrayOf("*"))
 class FieldController(private val fieldService: FieldService) {
     @GetMapping
     @Operation(description = "List all fields")
