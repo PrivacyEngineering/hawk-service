@@ -6,7 +6,7 @@ on:
       - 'v*'
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: hawk-service
 
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
           configuration-cache-enabled: true
       - name: Push image
         run: |
-          IMAGE_ID=${{ env.REGISTRY }}/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE_ID=${{ env.REGISTRY }}/${{ github.repository }}
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
