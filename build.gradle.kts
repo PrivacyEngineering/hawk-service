@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
     id("com.avast.gradle.docker-compose")
+    id("org.springdoc.openapi-gradle-plugin") version "1.6.0"
 }
 
 group = "org.datausagetracing"
