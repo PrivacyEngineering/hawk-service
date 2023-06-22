@@ -9,6 +9,7 @@ requiring a robust enough Postgres Database in the backend.
 
 For API
 reference: [SwaggerHub](https://app.swaggerhub.com/apis-docs/TUB-CNPE-TB/transparency-log-service/1.1.1)
+or locally: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
 
 ## Hawk Core Operate
 

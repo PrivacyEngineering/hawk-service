@@ -1,0 +1,1161 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Hawk-Service",
+    "version": "1.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/mappings": {
+      "get": {
+        "tags": [
+          "mapping-controller"
+        ],
+        "description": "List mappings",
+        "operationId": "list",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MappingPresentation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "mapping-controller"
+        ],
+        "description": "Update single existing mapping",
+        "operationId": "update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "mapping-controller"
+        ],
+        "description": "Create single mapping",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingInsertRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/fields": {
+      "get": {
+        "tags": [
+          "field-controller"
+        ],
+        "description": "List all fields",
+        "operationId": "list_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Field"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "field-controller"
+        ],
+        "description": "Update single existing field",
+        "operationId": "update_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "field-controller"
+        ],
+        "description": "Create single field",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/tag-values": {
+      "post": {
+        "tags": [
+          "grafana-controller"
+        ],
+        "operationId": "adhocValues",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdhocValueRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdhocValueResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag-keys": {
+      "post": {
+        "tags": [
+          "grafana-controller"
+        ],
+        "operationId": "adhocKeys",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdhocKeyResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "tags": [
+          "grafana-controller"
+        ],
+        "operationId": "search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/query": {
+      "post": {
+        "tags": [
+          "grafana-controller"
+        ],
+        "operationId": "query",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QueryResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/usages": {
+      "post": {
+        "tags": [
+          "usage-insert-controller"
+        ],
+        "description": "Create / update usage",
+        "operationId": "postUsage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/usages/batch": {
+      "post": {
+        "tags": [
+          "usage-insert-controller"
+        ],
+        "description": "Create / update multiple usages",
+        "operationId": "postUsageBatch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UsageRequest"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "grafana-controller"
+        ],
+        "operationId": "index",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/release/open": {
+      "get": {
+        "tags": [
+          "release-controller"
+        ],
+        "operationId": "openReleases",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Release"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/release/completed": {
+      "get": {
+        "tags": [
+          "release-controller"
+        ],
+        "operationId": "completedReleases",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Release"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mappings/{id}": {
+      "get": {
+        "tags": [
+          "mapping-controller"
+        ],
+        "description": "Get single existing mapping",
+        "operationId": "show",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MappingPresentation"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "mapping-controller"
+        ],
+        "description": "Delete single existing mapping",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/fields/{name}": {
+      "get": {
+        "tags": [
+          "field-controller"
+        ],
+        "description": "Get single existing field",
+        "operationId": "show_1",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Field"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "field-controller"
+        ],
+        "description": "Delete single existing field",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/endpoints/unmapped": {
+      "get": {
+        "tags": [
+          "endpoint-controller"
+        ],
+        "description": "Get list of unmapped endpoint ids",
+        "operationId": "unmapped",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/endpoints/fields/grouped": {
+      "get": {
+        "tags": [
+          "endpoint-controller"
+        ],
+        "description": "Get distinct list of usage fields by endpoint id",
+        "operationId": "groupedFields",
+        "parameters": [
+          {
+            "name": "endpointId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GroupedUsageField"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MappingFieldUpdateRequest": {
+        "required": [
+          "field",
+          "format",
+          "namespace",
+          "path",
+          "phase"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "field": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "phase": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "namespace": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "format": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      },
+      "MappingUpdateRequest": {
+        "required": [
+          "endpointId"
+        ],
+        "type": "object",
+        "properties": {
+          "endpointId": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "purposes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Purpose"
+            }
+          },
+          "legitimateInterests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "storage": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Storage"
+            }
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MappingFieldUpdateRequest"
+            }
+          }
+        }
+      },
+      "Purpose": {
+        "type": "object",
+        "properties": {
+          "purpose": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Storage": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "string"
+          }
+        }
+      },
+      "FieldRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 60,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9.-_]+$",
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string"
+          },
+          "personalData": {
+            "type": "boolean"
+          },
+          "specialCategoryPersonalData": {
+            "type": "boolean"
+          },
+          "legalBases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegalBase"
+            }
+          },
+          "legalRequirement": {
+            "type": "boolean"
+          },
+          "contractualRegulation": {
+            "type": "boolean"
+          },
+          "obligationToProvide": {
+            "type": "boolean"
+          },
+          "consequences": {
+            "type": "string"
+          }
+        }
+      },
+      "LegalBase": {
+        "type": "object",
+        "properties": {
+          "reference": {
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "^[A-Z]*([-]?[0-9]*|[a-z]*)*$",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "AdhocValueRequest": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          }
+        }
+      },
+      "AdhocValueResult": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "AdhocKeyResult": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "AdhocFilter": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "QueryRange": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          }
+        }
+      },
+      "QueryRequest": {
+        "type": "object",
+        "properties": {
+          "panelId": {
+            "type": "string"
+          },
+          "range": {
+            "$ref": "#/components/schemas/QueryRange"
+          },
+          "intervalMs": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "maxDataPoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QueryTarget"
+            }
+          },
+          "adhocFilters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdhocFilter"
+            }
+          }
+        }
+      },
+      "QueryTarget": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string"
+          },
+          "refId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      },
+      "QueryResult": {
+        "type": "object"
+      },
+      "EndpointRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "indexed identifier to uniquely identify this specific endpoint. In case of http this should be http:\u003cmethod\u003e:\u003chost\u003e:\u003cpath\u003e, must be sent at some point"
+          },
+          "host": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "destination host name, must be sent at some point"
+          },
+          "protocol": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "description": "example http, must be sent at some point"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "Information about the server and endpoint"
+      },
+      "InitiatorRequest": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "type": "string",
+            "description": "requestor host name, must be sent at some point"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "Information about the initiator of the request"
+      },
+      "MetadataRequest": {
+        "required": [
+          "phase",
+          "side",
+          "timestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "side": {
+            "type": "string",
+            "enum": [
+              "CLIENT",
+              "SERVER"
+            ]
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "REQUEST",
+              "RESPONSE"
+            ]
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Date and time when the request was captured, use zoned ISO Date Time if possible",
+            "format": "date-time"
+          }
+        },
+        "description": "Required Information about the sender of this usage"
+      },
+      "TagsRequest": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "Additional information that is associated with this usage"
+      },
+      "UsageRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            "type": "string",
+            "description": "unique identifier of the request/response"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/MetadataRequest"
+          },
+          "endpoint": {
+            "$ref": "#/components/schemas/EndpointRequest"
+          },
+          "initiator": {
+            "$ref": "#/components/schemas/InitiatorRequest"
+          },
+          "fields": {
+            "type": "array",
+            "description": "Extracted atomic value references of the messages data",
+            "items": {
+              "$ref": "#/components/schemas/FieldRequest"
+            }
+          },
+          "tags": {
+            "$ref": "#/components/schemas/TagsRequest"
+          }
+        }
+      },
+      "MappingFieldInsertRequest": {
+        "required": [
+          "field",
+          "format",
+          "namespace",
+          "path",
+          "phase",
+          "side"
+        ],
+        "type": "object",
+        "properties": {
+          "field": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "side": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "phase": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "namespace": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "format": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      },
+      "MappingInsertRequest": {
+        "required": [
+          "endpointId"
+        ],
+        "type": "object",
+        "properties": {
+          "endpointId": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "purposes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Purpose"
+            }
+          },
+          "legitimateInterests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "storage": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Storage"
+            }
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MappingFieldInsertRequest"
+            }
+          }
+        }
+      },
+      "Release": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "$ref": "#/components/schemas/TargetIdentifier"
+          },
+          "type": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TargetIdentifier": {
+        "type": "object",
+        "properties": {
+          "namespace": {
+            "type": "string"
+          },
+          "apiVersion": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "MappingFieldPresentation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "field": {
+            "type": "string"
+          },
+          "phase": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "MappingPresentation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endpointId": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MappingFieldPresentation"
+            }
+          }
+        }
+      },
+      "Field": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "personalData": {
+            "type": "boolean"
+          },
+          "specialCategoryPersonalData": {
+            "type": "boolean"
+          },
+          "legalBases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegalBase"
+            }
+          },
+          "legalRequirement": {
+            "type": "boolean"
+          },
+          "contractualRegulation": {
+            "type": "boolean"
+          },
+          "obligationToProvide": {
+            "type": "boolean"
+          },
+          "consequences": {
+            "type": "string"
+          }
+        }
+      },
+      "GroupedUsageField": {
+        "type": "object",
+        "properties": {
+          "phase": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
