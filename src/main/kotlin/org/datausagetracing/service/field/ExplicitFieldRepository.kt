@@ -134,4 +134,26 @@ class ExplicitFieldRepository(
             return@query map
         } ?: emptyMap()
     }
+
+    fun legalBases() : Map<String, String> {
+        return jdbcTemplate.query<Map<String, String>>(
+                """
+            SELECT reference, description FROM
+            (
+                SELECT id, name, js.reference, js.description
+                FROM (
+                    SELECT field.id, field.name, js.value as legal_bases
+                    FROM field, json_array_elements(field.legal_bases::json) as js
+                ) AS lb, json_to_record(lb.legal_bases) as js(reference text, description text)
+            ) as legal_bases
+            GROUP BY reference, description
+            ORDER BY reference ASC;
+        """.trimIndent()) { it: ResultSet ->
+            val map = mutableMapOf<String, String>()
+            while(it.next()) {
+                map[it.getString(1)] = it.getString(2)
+            }
+            return@query map
+        } ?: emptyMap()
+    }
 }
