@@ -1101,6 +1101,30 @@
             "items": {
               "$ref": "#/components/schemas/MappingFieldPresentation"
             }
+          },
+          "purposes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Purpose"
+            }
+          },
+          "legitimateInterests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "storage": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Storage"
+            }
           }
         }
       },
