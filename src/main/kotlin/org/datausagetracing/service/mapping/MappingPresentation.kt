@@ -3,10 +3,14 @@ package org.datausagetracing.service.mapping
 data class MappingPresentation(
     val id: Int,
     val endpointId: String,
-    val fields: List<MappingFieldPresentation>
+    val fields: List<MappingFieldPresentation>,
+    val purposes: List<Purpose>,
+    val legitimateInterests: List<String>,
+    val recipients: List<String>,
+    val storage: List<Storage>,
 ) {
     constructor(mapping: Mapping) : this(
-        mapping.id ?: 0, mapping.endpointId, mapping.fields.map(::MappingFieldPresentation)
+        mapping.id ?: 0, mapping.endpointId, mapping.fields.map(::MappingFieldPresentation), mapping.purposes, mapping.legitimateInterests, mapping.recipients, mapping.storage
     )
 }
 
