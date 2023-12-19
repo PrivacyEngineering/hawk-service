@@ -1,5 +1,6 @@
 package io.hawk.service.traffic.field
 
+import io.hawk.dlp.common.InfoType
 import org.springframework.stereotype.Service
 
 @Service
@@ -31,6 +32,7 @@ class FieldService(
         name = request.name.lowercase()
 
         request.description?.also { description = it }
+        infoTypes = request.infoTypes.map { InfoType.valueOf(it.uppercase()) }
         request.personalData?.also { personalData = it }
         request.specialCategoryPersonalData?.also { specialCategoryPersonalData = it }
         legalBases = request.legalBases

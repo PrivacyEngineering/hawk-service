@@ -1,10 +1,12 @@
 package io.hawk.service.traffic.field
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.vladmihalcea.hibernate.type.array.EnumArrayType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
+import io.hawk.dlp.common.InfoType
 import io.hawk.service.traffic.mapping.MappingField
-import org.hibernate.annotations.Type
 import jakarta.persistence.*
+import org.hibernate.annotations.Type
 
 @Entity
 class Field {
@@ -17,6 +19,9 @@ class Field {
     lateinit var name: String
 
     var description: String? = null
+
+    @Type(EnumArrayType::class)
+    lateinit var infoTypes: List<InfoType>
 
     @Column(nullable = false)
     var personalData: Boolean = false

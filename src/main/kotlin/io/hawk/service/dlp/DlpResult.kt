@@ -1,15 +1,10 @@
 package io.hawk.service.dlp
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
-import jakarta.persistence.Column
-import jakarta.persistence.DiscriminatorColumn
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Inheritance
-import jakarta.persistence.InheritanceType
+import jakarta.persistence.*
 import org.hibernate.annotations.Type
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @Entity
 @DiscriminatorColumn(name = "type")
@@ -22,5 +17,6 @@ open class DlpResult {
     open lateinit var timestamp: LocalDateTime
 
     @Type(JsonBinaryType::class)
+    @Column(columnDefinition = "jsonb")
     open var additional: Map<String, Any?>? = null
 }

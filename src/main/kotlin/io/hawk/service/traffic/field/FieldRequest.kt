@@ -13,6 +13,8 @@ class FieldRequest {
     @Size(max = 255)
     var description: String? = ""
 
+    var infoTypes: List<String> = mutableListOf()
+
     var personalData: Boolean? = false
 
     var specialCategoryPersonalData: Boolean? = false
