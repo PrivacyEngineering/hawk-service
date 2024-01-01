@@ -25,9 +25,6 @@ jobs:
         with:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
-      - name: Start containers
-        run: cd src/docker/postgresql && docker-compose -f "postgresql.yml" up -d
-
       - name: Generate OpenAPI Docs
         uses: eskatos/gradle-command-action@v1
         with:

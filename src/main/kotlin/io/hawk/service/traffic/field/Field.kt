@@ -20,6 +20,7 @@ class Field {
 
     var description: String? = null
 
+    @Column(columnDefinition = "jsonb")
     @Type(EnumArrayType::class)
     lateinit var infoTypes: List<InfoType>
 
