@@ -32,7 +32,7 @@ class FieldService(
         name = request.name.lowercase()
 
         request.description?.also { description = it }
-        infoTypes = request.infoTypes.map { InfoType.valueOf(it.uppercase()) }
+        infoTypes = request.infoTypes.map { InfoType.valueOf(it.uppercase()) }.toTypedArray()
         request.personalData?.also { personalData = it }
         request.specialCategoryPersonalData?.also { specialCategoryPersonalData = it }
         legalBases = request.legalBases

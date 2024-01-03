@@ -2,10 +2,12 @@ package io.hawk.service.traffic.field
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.vladmihalcea.hibernate.type.array.EnumArrayType
+import com.vladmihalcea.hibernate.type.array.internal.AbstractArrayType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import io.hawk.dlp.common.InfoType
 import io.hawk.service.traffic.mapping.MappingField
 import jakarta.persistence.*
+import org.hibernate.annotations.Parameter
 import org.hibernate.annotations.Type
 
 @Entity
@@ -20,9 +22,16 @@ class Field {
 
     var description: String? = null
 
-    @Column(columnDefinition = "jsonb")
-    @Type(EnumArrayType::class)
-    lateinit var infoTypes: List<InfoType>
+    @Type(value = EnumArrayType::class,
+        parameters = [
+            Parameter(
+                name = AbstractArrayType.SQL_ARRAY_TYPE,
+                value = "text"
+            )
+        ]
+    )
+    @Column(columnDefinition = "text[]")
+    lateinit var infoTypes: Array<InfoType>
 
     @Column(nullable = false)
     var personalData: Boolean = false
