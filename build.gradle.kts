@@ -53,8 +53,8 @@ dependencies {
 }
 
 openApi {
-    apiDocsUrl.set("http://localhost:8080/v3/api-docs.yaml")
-    outputFileName.set("openapi.yaml")
+    apiDocsUrl.set("http://localhost:8080/v3/api-docs")
+    outputFileName.set("openapi.json")
     waitTimeInSeconds.set(60)
     customBootRun {
         args.set(listOf("--spring.profiles.active=embedded"))
