@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Hawk-Service",
-    "version": "1.1.0"
+    "version": "2.0.0"
   },
   "servers": [
     {
@@ -272,6 +272,29 @@
         }
       }
     },
+    "/dlp/input": {
+      "post": {
+        "tags": [
+          "dlp-input-rest-controller"
+        ],
+        "operationId": "test",
+        "parameters": [
+          {
+            "name": "job",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Job"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/usages": {
       "post": {
         "tags": [
@@ -328,7 +351,7 @@
         "tags": [
           "grafana-controller"
         ],
-        "operationId": "index",
+        "operationId": "index_1",
         "responses": {
           "200": {
             "description": "OK"
@@ -594,7 +617,12 @@
       },
       "MappingUpdateRequest": {
         "required": [
-          "endpointId"
+          "endpointId",
+          "fields",
+          "legitimateInterests",
+          "purposes",
+          "recipients",
+          "storage"
         ],
         "type": "object",
         "properties": {
@@ -659,6 +687,8 @@
       },
       "FieldRequest": {
         "required": [
+          "infoTypes",
+          "legalBases",
           "name"
         ],
         "type": "object",
@@ -673,6 +703,12 @@
             "maxLength": 255,
             "minLength": 0,
             "type": "string"
+          },
+          "infoTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "personalData": {
             "type": "boolean"
@@ -706,7 +742,7 @@
           "reference": {
             "maxLength": 255,
             "minLength": 0,
-            "pattern": "^[A-Z]*([-]?[0-9]*|[a-z]*)*$",
+            "pattern": "^[A-Z]*(-?[0-9]*|[a-z]*)*$",
             "type": "string"
           },
           "description": {
@@ -723,6 +759,9 @@
         }
       },
       "AdhocValueResult": {
+        "required": [
+          "text"
+        ],
         "type": "object",
         "properties": {
           "text": {
@@ -731,6 +770,10 @@
         }
       },
       "AdhocKeyResult": {
+        "required": [
+          "text",
+          "type"
+        ],
         "type": "object",
         "properties": {
           "type": {
@@ -767,6 +810,11 @@
         }
       },
       "QueryRequest": {
+        "required": [
+          "adhocFilters",
+          "intervalMs",
+          "targets"
+        ],
         "type": "object",
         "properties": {
           "panelId": {
@@ -798,6 +846,9 @@
         }
       },
       "QueryTarget": {
+        "required": [
+          "target"
+        ],
         "type": "object",
         "properties": {
           "target": {
@@ -817,7 +868,103 @@
       "QueryResult": {
         "type": "object"
       },
+      "Function1JobUnit": {
+        "type": "object"
+      },
+      "Goal": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "InspectGoal": {
+        "required": [
+          "occurrenceType"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Goal"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "occurrenceType": {
+                "type": "string",
+                "enum": [
+                  "COLUMN"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Job": {
+        "required": [
+          "created",
+          "id",
+          "results",
+          "status",
+          "statusListeners"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CREATED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusListeners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Function1JobUnit"
+            }
+          },
+          "results": {
+            "type": "array",
+            "readOnly": true,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/InspectGoal"
+                }
+              ]
+            }
+          }
+        }
+      },
       "EndpointRequest": {
+        "required": [
+          "additionalProperties"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -848,6 +995,9 @@
         "description": "Information about the server and endpoint"
       },
       "InitiatorRequest": {
+        "required": [
+          "additionalProperties"
+        ],
         "type": "object",
         "properties": {
           "host": {
@@ -894,6 +1044,9 @@
         "description": "Required Information about the sender of this usage"
       },
       "TagsRequest": {
+        "required": [
+          "tags"
+        ],
         "type": "object",
         "properties": {
           "tags": {
@@ -907,7 +1060,12 @@
       },
       "UsageRequest": {
         "required": [
-          "id"
+          "endpoint",
+          "fields",
+          "id",
+          "initiator",
+          "metadata",
+          "tags"
         ],
         "type": "object",
         "properties": {
@@ -982,7 +1140,12 @@
       },
       "MappingInsertRequest": {
         "required": [
-          "endpointId"
+          "endpointId",
+          "fields",
+          "legitimateInterests",
+          "purposes",
+          "recipients",
+          "storage"
         ],
         "type": "object",
         "properties": {
@@ -1024,6 +1187,12 @@
         }
       },
       "Release": {
+        "required": [
+          "name",
+          "start",
+          "target",
+          "type"
+        ],
         "type": "object",
         "properties": {
           "target": {
@@ -1046,6 +1215,12 @@
         }
       },
       "TargetIdentifier": {
+        "required": [
+          "apiVersion",
+          "kind",
+          "name",
+          "namespace"
+        ],
         "type": "object",
         "properties": {
           "namespace": {
@@ -1063,6 +1238,13 @@
         }
       },
       "MappingFieldPresentation": {
+        "required": [
+          "field",
+          "format",
+          "namespace",
+          "path",
+          "phase"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1087,6 +1269,15 @@
         }
       },
       "MappingPresentation": {
+        "required": [
+          "endpointId",
+          "fields",
+          "id",
+          "legitimateInterests",
+          "purposes",
+          "recipients",
+          "storage"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1129,6 +1320,13 @@
         }
       },
       "Field": {
+        "required": [
+          "infoTypes",
+          "legalBases",
+          "name",
+          "personalData",
+          "specialCategoryPersonalData"
+        ],
         "type": "object",
         "properties": {
           "name": {
@@ -1136,6 +1334,48 @@
           },
           "description": {
             "type": "string"
+          },
+          "infoTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ADVERTISING_ID",
+                "AGE",
+                "AUTH_TOKEN",
+                "CREDENTIALS",
+                "CREDIT_CARD_NUMBER",
+                "CREDIT_CARD_EXPIRATION",
+                "CREDIT_CARD_SECURITY_CODE",
+                "DATE",
+                "DATE_OF_BIRTH",
+                "DOMAIN_NAME",
+                "EMAIL_ADDRESS",
+                "ENCRYPTION_KEY",
+                "ETHNIC_GROUP",
+                "GENDER",
+                "GENERIC_ID",
+                "IBAN_CODE",
+                "IMEI_NUMBER",
+                "IP_ADDRESS",
+                "JSON_WEB_TOKEN",
+                "LOCATION",
+                "MAC_ADDRESS",
+                "MEDICAL_TERM",
+                "NAME",
+                "ORGANIZATION_NAME",
+                "PASSPORT_NUMBER",
+                "PASSWORD",
+                "PHONE_NUMBER",
+                "ADDRESS",
+                "SWIFT_CODE",
+                "TIME",
+                "URL",
+                "VEHICLE_IDENTIFICATION_NUMBER",
+                "WEAK_PASSWORD_HASH",
+                "UNKNOWN"
+              ]
+            }
           },
           "personalData": {
             "type": "boolean"
@@ -1164,6 +1404,12 @@
         }
       },
       "GroupedUsageField": {
+        "required": [
+          "format",
+          "namespace",
+          "path",
+          "phase"
+        ],
         "type": "object",
         "properties": {
           "phase": {
