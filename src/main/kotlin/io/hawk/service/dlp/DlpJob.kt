@@ -29,7 +29,7 @@ class DlpJob {
     @JvmSuppressWildcards
     @OneToMany(mappedBy = "job", cascade = [CascadeType.ALL])
     @JsonSerialize(using = DlpResultOverviewSerializer::class)
-    lateinit var results: List<DlpResult>
+    var results: MutableList<DlpResult> = mutableListOf()
 
     class DlpResultOverviewSerializer : JsonSerializer<List<DlpResult>>() {
         override fun serialize(result: List<DlpResult>, generator: JsonGenerator, provider: SerializerProvider) {
