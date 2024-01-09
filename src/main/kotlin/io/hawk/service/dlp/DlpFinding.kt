@@ -19,7 +19,7 @@ class DlpFinding {
 
     @Type(JsonBinaryType::class)
     @Column(nullable = false, columnDefinition = "jsonb")
-    lateinit var occurrence: Occurrence
+    lateinit var occurrences: List<Occurrence>
 
     @Type(JsonBinaryType::class)
     @Column(columnDefinition = "jsonb")

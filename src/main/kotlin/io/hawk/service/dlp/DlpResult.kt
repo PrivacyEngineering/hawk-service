@@ -13,6 +13,10 @@ open class DlpResult {
     @Id
     open lateinit var id: UUID
 
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    var job: DlpJob? = null
+
     @Column(nullable = false)
     open lateinit var timestamp: LocalDateTime
 

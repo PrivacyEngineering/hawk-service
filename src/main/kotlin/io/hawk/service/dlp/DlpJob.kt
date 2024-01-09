@@ -2,9 +2,8 @@ package io.hawk.service.dlp
 
 import io.hawk.dlp.common.JobStatus
 import jakarta.persistence.*
-import org.hibernate.annotations.Type
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @Entity
 class DlpJob {
@@ -16,10 +15,13 @@ class DlpJob {
     @Column(nullable = false)
     var created: LocalDateTime = LocalDateTime.now()
 
-    @Enumerated
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     lateinit var status: JobStatus
 
-    @Column(length = 2_000)
+    @Column(columnDefinition = "TEXT")
     var error: String? = null
+
+    @OneToMany(mappedBy = "job")
+    lateinit var results: List<out DlpResult>
 }
