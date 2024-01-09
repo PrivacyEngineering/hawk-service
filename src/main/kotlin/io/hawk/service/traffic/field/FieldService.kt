@@ -1,6 +1,7 @@
 package io.hawk.service.traffic.field
 
 import io.hawk.dlp.common.InfoType
+import io.hawk.service.dlp.DlpFinding
 import org.springframework.stereotype.Service
 
 @Service
@@ -41,4 +42,6 @@ class FieldService(
         request.obligationToProvide?.also { obligationToProvide = it }
         request.consequences?.also { consequences = it }
     }
+
+    fun showDlp(name: String): List<DlpFinding> = showField(name).findings
 }

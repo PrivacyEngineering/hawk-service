@@ -1,10 +1,10 @@
 package io.hawk.service.traffic.field
 
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import jakarta.validation.Valid
 
 @Validated
 @RestController
@@ -18,6 +18,9 @@ class FieldController(private val fieldService: FieldService) {
     @GetMapping("/{name}")
     @Operation(description = "Get single existing field")
     fun show(@PathVariable name: String) = fieldService.showField(name)
+
+    @GetMapping("/{name}/dlp")
+    fun showDlp(@PathVariable name: String) = fieldService.showDlp(name)
 
     @PostMapping
     @Operation(description = "Create single field")

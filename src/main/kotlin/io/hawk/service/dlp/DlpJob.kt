@@ -1,5 +1,9 @@
 package io.hawk.service.dlp
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.JsonSerializer
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import io.hawk.dlp.common.JobStatus
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -22,6 +26,15 @@ class DlpJob {
     @Column(columnDefinition = "TEXT")
     var error: String? = null
 
-    @OneToMany(mappedBy = "job")
-    lateinit var results: List<out DlpResult>
+    @JvmSuppressWildcards
+    @OneToMany(mappedBy = "job", cascade = [CascadeType.ALL])
+    @JsonSerialize(using = DlpResultOverviewSerializer::class)
+    lateinit var results: List<DlpResult>
+
+    class DlpResultOverviewSerializer : JsonSerializer<List<DlpResult>>() {
+        override fun serialize(result: List<DlpResult>, generator: JsonGenerator, provider: SerializerProvider) {
+            generator.writeArray(result.map { it.id.toString() }.toTypedArray(), 0, result.size)
+        }
+
+    }
 }

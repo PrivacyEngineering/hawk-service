@@ -1,5 +1,8 @@
 package io.hawk.service.dlp
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonIdentityReference
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import io.hawk.dlp.common.InfoType
 import io.hawk.dlp.common.Occurrence
@@ -27,5 +30,8 @@ class DlpFinding {
 
     @ManyToOne
     @JoinColumn
+    @JsonIdentityReference(alwaysAsId=true)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property="id")
     lateinit var result: InspectDlpResult
+
 }
