@@ -27,7 +27,7 @@ class DlpJob {
     var error: String? = null
 
     @JvmSuppressWildcards
-    @OneToMany(mappedBy = "job", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "job", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JsonSerialize(using = DlpResultOverviewSerializer::class)
     var results: MutableList<DlpResult> = mutableListOf()
 

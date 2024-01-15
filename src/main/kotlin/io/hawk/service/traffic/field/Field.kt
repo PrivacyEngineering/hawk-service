@@ -61,7 +61,7 @@ class Field {
     var mappingFields: MutableList<MappingField> = mutableListOf()
 
     @JsonIgnore
-    @OneToMany(mappedBy = "field")
+    @ManyToMany
     @JoinFormula(value = """
     (SELECT 1 FROM field 
      WHERE field.id = field_id 

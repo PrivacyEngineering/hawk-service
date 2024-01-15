@@ -15,7 +15,7 @@ open class DlpResult {
 
     @ManyToOne
     @JoinColumn(name = "job_id")
-    var job: DlpJob? = null
+    open var job: DlpJob? = null
 
     @Column(nullable = false)
     open lateinit var timestamp: LocalDateTime

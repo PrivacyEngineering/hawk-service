@@ -3,13 +3,11 @@ package io.hawk.service.dlp
 import io.hawk.dlp.common.InspectResult
 import io.hawk.dlp.common.Job
 import io.hawk.dlp.common.Result
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
+@CrossOrigin(origins = arrayOf("*"))
 @RequestMapping("/api/dlp")
 class DlpInputRestController(
     private val dlpJobRepository: DlpJobRepository,
