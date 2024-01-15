@@ -272,29 +272,6 @@
         }
       }
     },
-    "/dlp/input": {
-      "post": {
-        "tags": [
-          "dlp-input-rest-controller"
-        ],
-        "operationId": "test",
-        "parameters": [
-          {
-            "name": "job",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Job"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/usages": {
       "post": {
         "tags": [
@@ -339,6 +316,89 @@
           },
           "required": true
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/dlp": {
+      "get": {
+        "tags": [
+          "dlp-output-rest-controller"
+        ],
+        "operationId": "list_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DlpJob"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dlp-input-rest-controller"
+        ],
+        "operationId": "input",
+        "parameters": [
+          {
+            "name": "job",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Job"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/dlp/{jobId}/result": {
+      "post": {
+        "tags": [
+          "dlp-input-rest-controller"
+        ],
+        "operationId": "result",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "result",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AnalyzeResult"
+                },
+                {
+                  "$ref": "#/components/schemas/InspectResult"
+                }
+              ]
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -513,6 +573,39 @@
         }
       }
     },
+    "/api/fields/{name}/dlp": {
+      "get": {
+        "tags": [
+          "field-controller"
+        ],
+        "operationId": "showDlp",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DlpFinding"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/endpoints/unmapped": {
       "get": {
         "tags": [
@@ -564,6 +657,37 @@
                   "items": {
                     "$ref": "#/components/schemas/GroupedUsageField"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dlp/results/{id}": {
+      "get": {
+        "tags": [
+          "dlp-output-rest-controller"
+        ],
+        "operationId": "show_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DlpResult"
                 }
               }
             }
@@ -868,99 +992,6 @@
       "QueryResult": {
         "type": "object"
       },
-      "Function1JobUnit": {
-        "type": "object"
-      },
-      "Goal": {
-        "required": [
-          "type"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "readOnly": true
-          },
-          "type": {
-            "type": "string"
-          }
-        },
-        "discriminator": {
-          "propertyName": "type"
-        }
-      },
-      "InspectGoal": {
-        "required": [
-          "occurrenceType"
-        ],
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Goal"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "occurrenceType": {
-                "type": "string",
-                "enum": [
-                  "COLUMN"
-                ]
-              }
-            }
-          }
-        ]
-      },
-      "Job": {
-        "required": [
-          "created",
-          "id",
-          "results",
-          "status",
-          "statusListeners"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "CREATED",
-              "IN_PROGRESS",
-              "COMPLETED",
-              "FAILED"
-            ]
-          },
-          "error": {
-            "type": "string"
-          },
-          "statusListeners": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Function1JobUnit"
-            }
-          },
-          "results": {
-            "type": "array",
-            "readOnly": true,
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/InspectGoal"
-                }
-              ]
-            }
-          }
-        }
-      },
       "EndpointRequest": {
         "required": [
           "additionalProperties"
@@ -1186,6 +1217,251 @@
           }
         }
       },
+      "Function1JobUnit": {
+        "type": "object"
+      },
+      "Goal": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "InspectGoal": {
+        "required": [
+          "occurrenceType"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Goal"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "occurrenceType": {
+                "type": "string",
+                "enum": [
+                  "COLUMN"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Job": {
+        "required": [
+          "created",
+          "id",
+          "results",
+          "status",
+          "statusListeners"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CREATED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusListeners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Function1JobUnit"
+            }
+          },
+          "results": {
+            "type": "array",
+            "readOnly": true,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/InspectGoal"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "AnalyzeResult": {
+        "required": [
+          "id",
+          "timestamp"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Result"
+          }
+        ]
+      },
+      "Finding": {
+        "required": [
+          "id",
+          "infoType",
+          "occurrences"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "infoType": {
+            "type": "string",
+            "enum": [
+              "ADVERTISING_ID",
+              "AGE",
+              "AUTH_TOKEN",
+              "CREDENTIALS",
+              "CREDIT_CARD_NUMBER",
+              "CREDIT_CARD_EXPIRATION",
+              "CREDIT_CARD_SECURITY_CODE",
+              "DATE",
+              "DATE_OF_BIRTH",
+              "DOMAIN_NAME",
+              "EMAIL_ADDRESS",
+              "ENCRYPTION_KEY",
+              "ETHNIC_GROUP",
+              "GENDER",
+              "GENERIC_ID",
+              "IBAN_CODE",
+              "IMEI_NUMBER",
+              "IP_ADDRESS",
+              "JSON_WEB_TOKEN",
+              "LOCATION",
+              "MAC_ADDRESS",
+              "MEDICAL_TERM",
+              "NAME",
+              "ORGANIZATION_NAME",
+              "PASSPORT_NUMBER",
+              "PASSWORD",
+              "PHONE_NUMBER",
+              "ADDRESS",
+              "SWIFT_CODE",
+              "TIME",
+              "URL",
+              "VEHICLE_IDENTIFICATION_NUMBER",
+              "WEAK_PASSWORD_HASH",
+              "UNKNOWN"
+            ]
+          },
+          "likelihood": {
+            "type": "number",
+            "format": "double"
+          },
+          "occurrences": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Occurrence"
+            }
+          },
+          "additional": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "writeOnly": true
+          }
+        }
+      },
+      "InspectResult": {
+        "required": [
+          "findings",
+          "findingsTruncated",
+          "id",
+          "timestamp"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Result"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "findings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Finding"
+                }
+              },
+              "findingsTruncated": {
+                "type": "boolean"
+              },
+              "additional": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                },
+                "writeOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "Occurrence": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Result": {
+        "required": [
+          "id",
+          "timestamp",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
       "Release": {
         "required": [
           "name",
@@ -1403,6 +1679,80 @@
           }
         }
       },
+      "DlpFinding": {
+        "required": [
+          "id",
+          "infoType",
+          "occurrences",
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "infoType": {
+            "type": "string",
+            "enum": [
+              "ADVERTISING_ID",
+              "AGE",
+              "AUTH_TOKEN",
+              "CREDENTIALS",
+              "CREDIT_CARD_NUMBER",
+              "CREDIT_CARD_EXPIRATION",
+              "CREDIT_CARD_SECURITY_CODE",
+              "DATE",
+              "DATE_OF_BIRTH",
+              "DOMAIN_NAME",
+              "EMAIL_ADDRESS",
+              "ENCRYPTION_KEY",
+              "ETHNIC_GROUP",
+              "GENDER",
+              "GENERIC_ID",
+              "IBAN_CODE",
+              "IMEI_NUMBER",
+              "IP_ADDRESS",
+              "JSON_WEB_TOKEN",
+              "LOCATION",
+              "MAC_ADDRESS",
+              "MEDICAL_TERM",
+              "NAME",
+              "ORGANIZATION_NAME",
+              "PASSPORT_NUMBER",
+              "PASSWORD",
+              "PHONE_NUMBER",
+              "ADDRESS",
+              "SWIFT_CODE",
+              "TIME",
+              "URL",
+              "VEHICLE_IDENTIFICATION_NUMBER",
+              "WEAK_PASSWORD_HASH",
+              "UNKNOWN"
+            ]
+          },
+          "likelihood": {
+            "type": "number",
+            "format": "double"
+          },
+          "occurrences": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Occurrence"
+            }
+          },
+          "additional": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "result": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "GroupedUsageField": {
         "required": [
           "format",
@@ -1423,6 +1773,72 @@
           },
           "path": {
             "type": "string"
+          }
+        }
+      },
+      "DlpJob": {
+        "required": [
+          "created",
+          "id",
+          "results",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "app": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CREATED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "error": {
+            "type": "string"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DlpResult"
+            }
+          }
+        }
+      },
+      "DlpResult": {
+        "required": [
+          "id",
+          "timestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "job": {
+            "$ref": "#/components/schemas/DlpJob"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "additional": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
           }
         }
       }
