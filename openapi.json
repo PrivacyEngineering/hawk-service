@@ -367,7 +367,7 @@
         }
       }
     },
-    "/api/dlp/{jobId}/result": {
+    "/api/dlp/{jobId}/result/inspect": {
       "post": {
         "tags": [
           "dlp-input-rest-controller"
@@ -388,14 +388,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/AnalyzeResult"
-                },
-                {
-                  "$ref": "#/components/schemas/InspectResult"
-                }
-              ]
+              "$ref": "#/components/schemas/InspectResult"
             }
           }
         ],
@@ -1310,18 +1303,6 @@
           }
         }
       },
-      "AnalyzeResult": {
-        "required": [
-          "id",
-          "timestamp"
-        ],
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Result"
-          }
-        ]
-      },
       "Finding": {
         "required": [
           "id",
@@ -1400,32 +1381,32 @@
           "timestamp"
         ],
         "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Result"
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
           },
-          {
-            "type": "object",
-            "properties": {
-              "findings": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Finding"
-                }
-              },
-              "findingsTruncated": {
-                "type": "boolean"
-              },
-              "additional": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "object"
-                },
-                "writeOnly": true
-              }
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Finding"
             }
+          },
+          "findingsTruncated": {
+            "type": "boolean"
+          },
+          "additional": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "writeOnly": true
           }
-        ]
+        }
       },
       "Occurrence": {
         "required": [
@@ -1436,30 +1417,6 @@
           "type": {
             "type": "string"
           }
-        }
-      },
-      "Result": {
-        "required": [
-          "id",
-          "timestamp",
-          "type"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "type": {
-            "type": "string"
-          }
-        },
-        "discriminator": {
-          "propertyName": "type"
         }
       },
       "Release": {
