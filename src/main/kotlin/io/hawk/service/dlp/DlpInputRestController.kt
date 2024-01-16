@@ -24,25 +24,23 @@ class DlpInputRestController(
         dlpJobRepository.save(dlpJob)
     }
 
-    @PostMapping("/{jobId}/result")
-    fun result(@PathVariable jobId: UUID, result: Result) {
+    @PostMapping("/{jobId}/result/inspect")
+    fun result(@PathVariable jobId: UUID, result: InspectResult) {
         val dlpJob = dlpJobRepository.findById(jobId).orElseThrow { error("Job does not exist") }
-        if(result is InspectResult) {
-            val dlpResult = InspectDlpResult().apply {
-                id = result.id
-                job = dlpJob
-                timestamp = result.timestamp
-                additional = result.additional
-                findings = result.findings.map {
-                    DlpFinding().apply {
-                        infoType = it.infoType
-                        likelihood = it.likelihood
-                        occurrences = it.occurrences
-                        additional = it.additional
-                    }
+        val dlpResult = InspectDlpResult().apply {
+            id = result.id
+            job = dlpJob
+            timestamp = result.timestamp
+            additional = result.additional
+            findings = result.findings.map {
+                DlpFinding().apply {
+                    infoType = it.infoType
+                    likelihood = it.likelihood
+                    occurrences = it.occurrences
+                    additional = it.additional
                 }
             }
-            dlpResultRepository.save(dlpResult)
         }
+        dlpResultRepository.save(dlpResult)
     }
 }
