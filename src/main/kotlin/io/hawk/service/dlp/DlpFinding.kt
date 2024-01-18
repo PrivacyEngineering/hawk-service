@@ -15,6 +15,7 @@ class DlpFinding {
     @Id
     var id: UUID = UUID.randomUUID()
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     lateinit var infoType: InfoType
 
@@ -28,10 +29,10 @@ class DlpFinding {
     @Column(columnDefinition = "jsonb")
     var additional: Map<String, Any?>? = null
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     @JsonIdentityReference(alwaysAsId=true)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property="id")
-    lateinit var result: InspectDlpResult
+    var result: InspectDlpResult? = null
 
 }

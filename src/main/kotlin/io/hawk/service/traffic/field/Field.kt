@@ -5,10 +5,8 @@ import com.vladmihalcea.hibernate.type.array.EnumArrayType
 import com.vladmihalcea.hibernate.type.array.internal.AbstractArrayType
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import io.hawk.dlp.common.InfoType
-import io.hawk.service.dlp.DlpFinding
 import io.hawk.service.traffic.mapping.MappingField
 import jakarta.persistence.*
-import org.hibernate.annotations.JoinFormula
 import org.hibernate.annotations.Parameter
 import org.hibernate.annotations.Type
 
@@ -24,6 +22,7 @@ class Field {
 
     var description: String? = null
 
+    @Enumerated(EnumType.STRING)
     @Type(value = EnumArrayType::class,
         parameters = [
             Parameter(
@@ -59,13 +58,4 @@ class Field {
     @JsonIgnore
     @OneToMany(mappedBy = "field", cascade = [CascadeType.REMOVE])
     var mappingFields: MutableList<MappingField> = mutableListOf()
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinFormula(value = """
-    (SELECT 1 FROM field 
-     WHERE field.id = field_id 
-     AND dlp_finding.info_type = ANY(field.info_types))
-    """, referencedColumnName = "id")
-    var findings: MutableList<DlpFinding> = mutableListOf()
 }

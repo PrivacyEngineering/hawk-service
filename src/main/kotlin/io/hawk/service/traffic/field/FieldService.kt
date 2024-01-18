@@ -2,11 +2,13 @@ package io.hawk.service.traffic.field
 
 import io.hawk.dlp.common.InfoType
 import io.hawk.service.dlp.DlpFinding
+import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Service
 
 @Service
 class FieldService(
-    private val fieldRepository: FieldRepository
+    private val fieldRepository: FieldRepository,
+    private val entityManager: EntityManager
 ) {
     fun listFields(): List<Field> = fieldRepository.findAll()
 
@@ -43,5 +45,12 @@ class FieldService(
         request.consequences?.also { consequences = it }
     }
 
-    fun showDlp(name: String): List<DlpFinding> = showField(name).findings
+    fun showDlp(fieldName: String): List<DlpFinding> {
+        return entityManager
+                .createNativeQuery("""
+                    select d.id, d.info_type, d.likelihood, d.additional, d.occurrences, d.result_id from dlp_finding d join field on d.info_type = ANY(field.info_types) AND field.name = :field_name
+                """.trimIndent(), DlpFinding::class.java)
+                .setParameter("field_name", fieldName)
+                .resultList as List<DlpFinding>
+    }
 }

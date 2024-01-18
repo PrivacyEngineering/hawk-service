@@ -1,8 +1,6 @@
 package io.hawk.service.dlp
 
-import io.hawk.dlp.common.InspectResult
 import io.hawk.dlp.common.Job
-import io.hawk.dlp.common.Result
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -25,20 +23,22 @@ class DlpInputRestController(
     }
 
     @PostMapping("/{jobId}/result/inspect")
-    fun result(@PathVariable jobId: UUID, result: InspectResult) {
+    fun result(@PathVariable jobId: UUID, @RequestBody result: InspectDlpResult) {
         val dlpJob = dlpJobRepository.findById(jobId).orElseThrow { error("Job does not exist") }
         val dlpResult = InspectDlpResult().apply {
             id = result.id
             job = dlpJob
             timestamp = result.timestamp
             additional = result.additional
-            findings = result.findings.map {
-                DlpFinding().apply {
-                    infoType = it.infoType
-                    likelihood = it.likelihood
-                    occurrences = it.occurrences
-                    additional = it.additional
-                }
+        }
+        dlpResult.findings = result.findings.map {
+            DlpFinding().apply {
+                id = it.id
+                infoType = it.infoType
+                likelihood = it.likelihood
+                occurrences = it.occurrences
+                additional = it.additional
+                this.result = dlpResult
             }
         }
         dlpResultRepository.save(dlpResult)
