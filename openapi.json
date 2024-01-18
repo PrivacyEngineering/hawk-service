@@ -382,16 +382,18 @@
               "type": "string",
               "format": "uuid"
             }
-          },
-          {
-            "name": "result",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/InspectResult"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InspectDlpResult"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1303,7 +1305,7 @@
           }
         }
       },
-      "Finding": {
+      "DlpFinding": {
         "required": [
           "id",
           "infoType",
@@ -1368,15 +1370,56 @@
             "type": "object",
             "additionalProperties": {
               "type": "object"
-            },
-            "writeOnly": true
+            }
+          },
+          "result": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
-      "InspectResult": {
+      "DlpJob": {
         "required": [
-          "findings",
-          "findingsTruncated",
+          "created",
+          "id",
+          "results",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "app": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CREATED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "FAILED"
+            ]
+          },
+          "error": {
+            "type": "string"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DlpResult"
+            }
+          }
+        }
+      },
+      "DlpResult": {
+        "required": [
           "id",
           "timestamp"
         ],
@@ -1386,25 +1429,51 @@
             "type": "string",
             "format": "uuid"
           },
+          "job": {
+            "$ref": "#/components/schemas/DlpJob"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
-          },
-          "findings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Finding"
-            }
-          },
-          "findingsTruncated": {
-            "type": "boolean"
           },
           "additional": {
             "type": "object",
             "additionalProperties": {
               "type": "object"
-            },
-            "writeOnly": true
+            }
+          }
+        }
+      },
+      "InspectDlpResult": {
+        "required": [
+          "findings",
+          "id",
+          "timestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "job": {
+            "$ref": "#/components/schemas/DlpJob"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "additional": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DlpFinding"
+            }
           }
         }
       },
@@ -1636,80 +1705,6 @@
           }
         }
       },
-      "DlpFinding": {
-        "required": [
-          "id",
-          "infoType",
-          "occurrences",
-          "result"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "infoType": {
-            "type": "string",
-            "enum": [
-              "ADVERTISING_ID",
-              "AGE",
-              "AUTH_TOKEN",
-              "CREDENTIALS",
-              "CREDIT_CARD_NUMBER",
-              "CREDIT_CARD_EXPIRATION",
-              "CREDIT_CARD_SECURITY_CODE",
-              "DATE",
-              "DATE_OF_BIRTH",
-              "DOMAIN_NAME",
-              "EMAIL_ADDRESS",
-              "ENCRYPTION_KEY",
-              "ETHNIC_GROUP",
-              "GENDER",
-              "GENERIC_ID",
-              "IBAN_CODE",
-              "IMEI_NUMBER",
-              "IP_ADDRESS",
-              "JSON_WEB_TOKEN",
-              "LOCATION",
-              "MAC_ADDRESS",
-              "MEDICAL_TERM",
-              "NAME",
-              "ORGANIZATION_NAME",
-              "PASSPORT_NUMBER",
-              "PASSWORD",
-              "PHONE_NUMBER",
-              "ADDRESS",
-              "SWIFT_CODE",
-              "TIME",
-              "URL",
-              "VEHICLE_IDENTIFICATION_NUMBER",
-              "WEAK_PASSWORD_HASH",
-              "UNKNOWN"
-            ]
-          },
-          "likelihood": {
-            "type": "number",
-            "format": "double"
-          },
-          "occurrences": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Occurrence"
-            }
-          },
-          "additional": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
-          },
-          "result": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
       "GroupedUsageField": {
         "required": [
           "format",
@@ -1730,72 +1725,6 @@
           },
           "path": {
             "type": "string"
-          }
-        }
-      },
-      "DlpJob": {
-        "required": [
-          "created",
-          "id",
-          "results",
-          "status"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "app": {
-            "type": "string"
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "CREATED",
-              "IN_PROGRESS",
-              "COMPLETED",
-              "FAILED"
-            ]
-          },
-          "error": {
-            "type": "string"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DlpResult"
-            }
-          }
-        }
-      },
-      "DlpResult": {
-        "required": [
-          "id",
-          "timestamp"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "job": {
-            "$ref": "#/components/schemas/DlpJob"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "additional": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
           }
         }
       }
