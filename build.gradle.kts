@@ -43,7 +43,7 @@ dependencies {
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.4"))
     implementation("org.testcontainers:junit-jupiter")
     implementation("org.testcontainers:postgresql")
-    implementation("com.github.PrivacyEngineering:hawk-dlp:1.0.4")
+    implementation("com.github.PrivacyEngineering:hawk-dlp:1.0.6")
     implementation("io.micrometer:micrometer-registry-prometheus")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")

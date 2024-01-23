@@ -12,7 +12,7 @@ class DlpInputRestController(
     private val dlpResultRepository: DlpResultRepository
 ) {
     @PostMapping
-    fun input(job: Job) {
+    fun input(@RequestBody job: Job) {
         val dlpJob = DlpJob().apply dlp@{
             id = job.id
             created = job.created
