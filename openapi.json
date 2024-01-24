@@ -350,16 +350,16 @@
           "dlp-input-rest-controller"
         ],
         "operationId": "input",
-        "parameters": [
-          {
-            "name": "job",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Job"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Job"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1212,9 +1212,6 @@
           }
         }
       },
-      "Function1JobUnit": {
-        "type": "object"
-      },
       "Goal": {
         "required": [
           "type"
@@ -1261,8 +1258,7 @@
           "created",
           "id",
           "results",
-          "status",
-          "statusListeners"
+          "status"
         ],
         "type": "object",
         "properties": {
@@ -1286,12 +1282,6 @@
           "error": {
             "type": "string"
           },
-          "statusListeners": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Function1JobUnit"
-            }
-          },
           "results": {
             "type": "array",
             "readOnly": true,
@@ -1304,6 +1294,74 @@
             }
           }
         }
+      },
+      "ColumnContainerOccurrence": {
+        "required": [
+          "column",
+          "container",
+          "type"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Occurrence"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "string"
+              },
+              "container": {
+                "type": "string"
+              },
+              "volume": {
+                "type": "string"
+              },
+              "filePath": {
+                "type": "string"
+              },
+              "database": {
+                "type": "string"
+              },
+              "table": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ContainerOccurrence": {
+        "required": [
+          "container",
+          "type"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Occurrence"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "container": {
+                "type": "string"
+              },
+              "volume": {
+                "type": "string"
+              },
+              "filePath": {
+                "type": "string"
+              },
+              "database": {
+                "type": "string"
+              },
+              "table": {
+                "type": "string"
+              }
+            }
+          }
+        ]
       },
       "DlpFinding": {
         "required": [
@@ -1363,7 +1421,14 @@
           "occurrences": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Occurrence"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ColumnContainerOccurrence"
+                },
+                {
+                  "$ref": "#/components/schemas/ContainerOccurrence"
+                }
+              ]
             }
           },
           "additional": {
@@ -1486,6 +1551,9 @@
           "type": {
             "type": "string"
           }
+        },
+        "discriminator": {
+          "propertyName": "type"
         }
       },
       "Release": {
